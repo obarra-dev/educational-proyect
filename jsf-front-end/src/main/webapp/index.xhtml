@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+ <h:head>  
+      <title>JSF 2.2 Hello World</title>  
+ </h:head>  
+ <h:body>  
+      <h3>JSF 2.2 Hello World Example - welcome.xhtml</h3>  
+      	#{lifeController.message}
+      	
+      		<h:form id="Requests" styleClass="col c100 fLeft">
+      		
+      	<ui:include src="templates/data-fragments/df-identification.xhtml">
+			<ui:param name="formName" value="#{formName}" />
+			<ui:param name="id" value="#{id}" />
+			<ui:param name="required" value="#{true}" />
+			<ui:param name="readonly" value="#{false}" />
+			<ui:param name="disabled" value="#{disabled}" />
+		</ui:include>
+      		<div class="c100 fLeft">
+
+			<fieldset class="col c33 fLeft uiLabel uiRequired symbol symPer">
+				<p:inputNumber id="#{id}Percentage" required="true" 
+					readonly="#{lifeController.percentage != null}"
+					requiredMessage="Debe ingresar un porcentaje de extensión" title="% Extensión"
+					value="#{lifeController.percentage}" minValue="0.01" maxValue="100">
+				</p:inputNumber>
+				<h:message for="messageIdentificationValid" />
+				<p:outputLabel id="#{id}Percentage-lbl" for="#{id}Percentage" value="% Extensión" />
+				<p:message display="text" id="#{id}Percentage-msg" for="#{id}Percentage" />
+			</fieldset>
+			
+
+			<fieldset class="col c33 fLeft uiLabel uiRequired">
+				<p:selectOneMenu panelStyleClass="dialog" id="#{id}Gender" styleClass="ph" filter="false" 
+					required="true" disabled="#{lifeController.person.gender!=null and lifeController.person.gender!=''}"
+					requiredMessage="Debe seleccionar un sexo" value="#{lifeController.person.gender}" title="Sexo">
+					<f:selectItem itemLabel="---" noSelectionOption="true" />
+					<f:selectItem itemLabel="FEMENINO" itemValue="#{2}" />
+					<f:selectItem itemLabel="MASCULINO" itemValue="#{1}" />
+				</p:selectOneMenu>
+				<p:outputLabel id="#{id}Gender-lbl" for="#{id}Gender" value="Sexo" />
+				<p:message display="text" id="#{id}Gender-msg" for="#{id}Gender" />
+			</fieldset>
+			<fieldset class="col c33 fLeft uiLabel uiRequired">
+				<p:calendar id="#{id}BirthDate" value="#{lifeController.person.birthDate}" 
+					required="true" disabled="#{lifeController.person.birthDate!=null}"
+					requiredMessage="Debe ingresar la fecha de nacimiento" pattern="dd/MM/yyyy" navigator="true"
+					readonlyInput="true" title="Fecha de nacimiento">
+				</p:calendar>
+				<p:outputLabel id="#{id}BirthDate-lbl" for="#{id}BirthDate" value="Fecha de nacimiento" />
+				<p:message display="text" id="#{id}BirthDate-msg" for="#{id}BirthDate" />
+				<span class="ui-icon ui-icon-calendar"></span>
+			</fieldset>
+				
+			<div class="col c100 fLeft">
+			<hr />
+		</div>
+
+	 
+		<div class="c100 fLeft">
+			<fieldset class="col c33 fRight">
+				<p:commandButton value="GUARDAR" styleClass="btnLocal" icon="ui-icon ui-icon-save" iconPos="right"  binding="#{lifeController.messageIdentificationValid}" id="messageIdentificationValid"
+					update="@form" oncomplete="mOk('#{formName}');" actionListener="#{lifeController.completeSection(sectionId)}" />
+			</fieldset>
+		
+		</div>
+		
+		</div>
+		</h:form>
+		
+ </h:body>  
+</html>

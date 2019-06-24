@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:h="http://java.sun.com/jsf/html" xmlns:c="http://java.sun.com/jstl/core" xmlns:p="http://primefaces.org/ui">
+
+	<p:outputPanel id="#{id}IdentificationData" styleClass="c66 fLeft">
+
+		<fieldset class="col c50 fLeft uiLabel #{required ? 'uiRequired' : ''} #{readonly or idNumberReadonly ? 'uiReadonly' : ''}">
+			<p:inputText id="#{id}IdentificationNumber" value="1234" disabled="#{readonly or disabled}"
+			 required="#{required}" requiredMessage="Debe ingresar un número documento" readonly="#{readonly}" title="Número de documento">
+			 <f:validateLength minimum="6" maximum="11" />
+		
+			 <p:ajax event="blur" update="#{id}IdentificationData" process="@this" />
+			 
+			</p:inputText>
+			<p:outputLabel id="#{id}IdentificationNumber-lbl" for="#{id}IdentificationNumber" value="Número de documento" />
+			<p:message display="text" id="#{id}IdentificationNumber-msg" for="#{id}IdentificationNumber" />
+			<span class="ui-icon ui-icon-id"></span>
+		</fieldset>
+	</p:outputPanel>
+
+</ui:composition>
