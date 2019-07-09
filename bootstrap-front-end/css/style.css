@@ -1,0 +1,17 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.mar-navbar{
+    background-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.mar-navbar div, .mar-navbar ul{
+    background-color: transparent !important;
+}

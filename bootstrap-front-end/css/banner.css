@@ -1,0 +1,81 @@
+.mar_cont_baner{
+    height: 100vh;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: none;
+    background-size: cover;
+    background-image: url("../img/min_bnn3_img_1561567214.jpg")
+}
+
+.mar_shadow{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+    padding: 20%;
+    width: 80%;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    margin: auto;
+}
+
+.mar_shadow hr{
+    border-top: 1px solid #fff;
+}
+
+.mar_shadow h1{
+    font-size: 8vw;
+    margin-bottom: 10px;
+}
+
+.mar_shadow p{
+    font-size: 4vw;
+    margin-bottom: 10px;
+}
+
+.mar_cont_baner_link{
+    margin: 15%;
+    position: relative;
+}
+
+.mar_cont_baner_link a{
+    position: relative;
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #fff;
+    padding: 1px;
+    margin-bottom: 5px;
+    width: 150px;
+}
+
+.mar_cont_baner_link a:hover{
+    background-color: #fff;
+    color: #111;
+}
+
+.mar_banner_link_1{
+    opacity: 0;
+    animation: mar_kf_show_from_top 1s;
+    -webkit-animation: mar_kf_show_from_top 1s;
+    animation-fill-mode: forwards;
+}
+
+.mar_banner_link_2{
+    opacity: 0;
+    animation: mar_kf_show_from_top 1s;
+    -webkit-animation: mar_kf_show_from_top 1s;
+    animation-fill-mode: forwards;
+    animation-delay: 0.5s;
+}
+
+.mar_banner_link_3{
+    opacity: 0;
+    animation: mar_kf_show_from_top 1s;
+    -webkit-animation: mar_kf_show_from_top 1s;
+    animation-fill-mode: forwards;
+    animation-delay: 1s;
+}
