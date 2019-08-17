@@ -15,7 +15,7 @@ import com.omm.item.service.ItemService;
 public class ItemController {
 
 	@Autowired
-	@Qualifier("itemServiceFeign")
+	@Qualifier("itemServiceRestTemplate")
 	private ItemService itemService;
 	
 	@GetMapping("/list")

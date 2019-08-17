@@ -20,7 +20,7 @@ public class ItemServiceRestTemplate implements ItemService{
 	private RestTemplate restTemplate;
 	
 	public List<Item> findAll(){
-		Product[] productsArray = restTemplate.getForObject("http://localhost:8080/list", Product[].class);
+		Product[] productsArray = restTemplate.getForObject("http://product-service/list", Product[].class);
 		List<Product> products = Arrays.asList(productsArray);
 		List<Item> items = products.stream().map(p -> new Item(p, 1L))
 				.collect(Collectors.toList());
@@ -30,8 +30,7 @@ public class ItemServiceRestTemplate implements ItemService{
 	public Item findById(Long id, Long amount) {
 		Map<String, String> params = new HashMap<>();
 		params.put("id", id.toString());
-		Product product = restTemplate.getForObject("http://localhost:8080/product/{id}", Product.class, params);
-		
+		Product product = restTemplate.getForObject("http://product-service/product/{id}", Product.class, params);
 		return new Item(product, amount);
 	}
 
