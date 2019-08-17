@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "PRODUCTS")
@@ -26,6 +27,9 @@ public class Product {
 	@Column(name = "CREATE_AT")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
+	
+	@Transient
+	private String port;
 
 	public Long getId() {
 		return id;
@@ -57,5 +61,13 @@ public class Product {
 
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
+	}
+
+	public String getPort() {
+		return port;
+	}
+
+	public void setPort(String port) {
+		this.port = port;
 	}
 }
