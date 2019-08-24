@@ -30,5 +30,16 @@ public class ProductService {
 		product.setPort(environment.getProperty("local.server.port"));
 		return product;
 	}
+	
+	@Transactional
+	public Product save(Product product) {
+		return productRepository.save(product);
+	}
+	
+	@Transactional
+	public void deleteById(Long id) {
+		productRepository.deleteById(id);;
+	}
+	
 
 }
