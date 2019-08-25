@@ -30,7 +30,7 @@ import com.omm.item.service.ItemService;
 public class ItemController {
 
 	@Autowired
-	@Qualifier("itemServiceRestTemplate")
+	@Qualifier("itemServiceFeign")
 	private ItemService itemService;
 	
 	@Autowired
