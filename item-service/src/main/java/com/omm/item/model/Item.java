@@ -1,5 +1,7 @@
 package com.omm.item.model;
 
+import com.omm.common.model.entity.Product;
+
 public class Item {
 	private Product product;
 	private Long amount;

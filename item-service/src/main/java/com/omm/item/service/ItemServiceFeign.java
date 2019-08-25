@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.omm.common.model.entity.Product;
 import com.omm.item.client.ProductClientRest;
 import com.omm.item.model.Item;
-import com.omm.item.model.Product;
 
 @Service("itemServiceFeign")
 public class ItemServiceFeign implements ItemService{

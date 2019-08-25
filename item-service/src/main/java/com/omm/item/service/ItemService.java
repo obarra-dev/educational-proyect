@@ -1,8 +1,9 @@
 package com.omm.item.service;
 
 import java.util.List;
+
+import com.omm.common.model.entity.Product;
 import com.omm.item.model.Item;
-import com.omm.item.model.Product;
 
 public interface ItemService {
 	

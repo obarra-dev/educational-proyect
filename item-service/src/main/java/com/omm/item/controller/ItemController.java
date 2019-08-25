@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,13 +23,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.omm.common.model.entity.Product;
 import com.omm.item.model.Item;
-import com.omm.item.model.Product;
 import com.omm.item.service.ItemService;
 
 @RefreshScope
 @RestController
 public class ItemController {
+	
+	private Logger LOG = LoggerFactory.getLogger(ItemController.class);
 
 	@Autowired
 	@Qualifier("itemServiceFeign")
@@ -41,6 +45,7 @@ public class ItemController {
 	
 	@GetMapping("/list")
 	public List<Item> findAll(){
+		LOG.info("Execute LIST of Items");
 		return itemService.findAll();
 	}
 	
