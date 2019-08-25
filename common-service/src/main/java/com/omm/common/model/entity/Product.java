@@ -1,4 +1,4 @@
-package com.omm.product.model.entity;
+package com.omm.common.model.entity;
 
 import java.util.Date;
 
