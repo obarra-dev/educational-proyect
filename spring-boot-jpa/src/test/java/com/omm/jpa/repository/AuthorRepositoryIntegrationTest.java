@@ -2,6 +2,7 @@ package com.omm.jpa.repository;
 
 import com.omm.jpa.model.entity.Author;
 import com.omm.jpa.model.entity.AuthorProjection;
+import com.omm.jpa.model.entity.AuthorSimplified;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsNot;
@@ -29,6 +30,9 @@ public class AuthorRepositoryIntegrationTest {
 
     @Autowired
     private AuthorNativeRepository authorComplexRepository;
+
+    @Autowired
+    private AuthorNativeEntityRepository authorNativeEntityRepository;
 
 
     @Before
@@ -63,6 +67,14 @@ public class AuthorRepositoryIntegrationTest {
         Author authorExpected = new Author("Omar", "Barra");
         List<Author> result = authorRepository.findByFirstNameIgnoreCase("omar");
         MatcherAssert.assertThat(result, Matchers.contains(authorExpected));
+    }
+    @Test
+    public void findTest(){
+        List<AuthorSimplified> authors = authorNativeEntityRepository.executeQuery();
+        for (AuthorSimplified authorSimplified: authors) {
+            System.out.println(authorSimplified.getName() +" "+authorSimplified.getSurname());
+        }
+
     }
 
     @Test
