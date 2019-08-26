@@ -1,7 +1,7 @@
 package com.omm.jpa.repository;
 
 import com.omm.jpa.model.entity.Author;
-import com.sun.deploy.si.SingleInstanceManager;
+import com.omm.jpa.model.entity.AuthorProjection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsNot;
@@ -17,8 +17,6 @@ import javax.persistence.PersistenceContext;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 @DataJpaTest
 @RunWith(SpringRunner.class)
 public class AuthorRepositoryIntegrationTest {
@@ -28,6 +26,10 @@ public class AuthorRepositoryIntegrationTest {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private AuthorNativeRepository authorComplexRepository;
+
 
     @Before
     public void before(){
@@ -63,5 +65,24 @@ public class AuthorRepositoryIntegrationTest {
         MatcherAssert.assertThat(result, Matchers.contains(authorExpected));
     }
 
+    @Test
+    public void find(){
+
+        List<AuthorProjection> authors = authorComplexRepository.findFirstByFirstName();
+        for (AuthorProjection p: authors) {
+            System.out.println(p.getName() +" "+p.getSurname());
+        }
+        String na = authors.get(0).getName();
+        System.out.println(na);
+
+
+        /**
+        List<Object> authors = authorComplexRepository.findFirstByFirstName();
+        for(Object object: authors){
+            System.out.println(object);
+        }
+
+         **/
+    }
 
 }
