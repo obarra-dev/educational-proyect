@@ -20,10 +20,10 @@ public class SpringBootMailApplication implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... args){
+	public void run(String... args) throws MessagingException {
 		System.out.println("Sending Email...");
 
-		notificationService.send();
+		notificationService.sendWithAttachment();
 
 		System.out.println("Done");
 	}
