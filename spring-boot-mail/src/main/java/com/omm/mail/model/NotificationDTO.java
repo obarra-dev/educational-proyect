@@ -6,7 +6,7 @@ import java.util.Map;
 public class NotificationDTO {
 
     //@NotEmpty(message = "to cannot be empty")
-    private String to;
+    private String[] to;
     //@NotEmpty(message = "to cannot be empty")
     private String templateKey;
 
@@ -14,11 +14,11 @@ public class NotificationDTO {
 
     private List<FileDocumentDTO> files;
 
-    public String getTo() {
+    public String[] getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(String[] to) {
         this.to = to;
     }
 

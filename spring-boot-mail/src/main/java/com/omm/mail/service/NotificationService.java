@@ -4,6 +4,7 @@ import com.omm.mail.model.EmailTemplate;
 import com.omm.mail.model.FileDocumentDTO;
 import com.omm.mail.model.NotificationDTO;
 import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -55,19 +56,28 @@ public class NotificationService {
 
     public void send(NotificationDTO notificationDTO) throws Exception {
         EmailTemplate emailTemplate = new EmailTemplate();
+        emailTemplate.setBody("<h1>Hi $name$, <br> This is JIRA $ID$ <br> Check attachment for image!</h1>");
+        emailTemplate.setSubject("JIRA-$ID$");
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(notificationDTO.getTo());
-        helper.setFrom("");
-        StringTemplate stBody = new StringTemplate(emailTemplate.getBody());
-        StringTemplate stSubject = new StringTemplate(emailTemplate.getSubject());
-        if (notificationDTO.getTemplateParameters() != null) {
-            stBody.setAttributes(notificationDTO.getTemplateParameters());
-            stSubject.setAttributes(notificationDTO.getTemplateParameters());
-        }
-        helper.setText(String.valueOf(stBody));
-        helper.setSubject(String.valueOf(stSubject));
+        helper.setFrom("barraomar12@gmail.com");
 
+        String body = emailTemplate.getBody();
+        String subject = emailTemplate.getSubject();
+        if (notificationDTO.getTemplateParameters() != null) {
+            body = UtilStringTemplate.completeAndRender(
+                    "email-body", notificationDTO.getTemplateParameters());
+
+            StringTemplate stSubject = new StringTemplate(emailTemplate.getSubject(), DefaultTemplateLexer.class);
+            stSubject.setAttributes(notificationDTO.getTemplateParameters());
+            subject = String.valueOf(stSubject);
+        }
+
+        helper.setText(body, true);
+        helper.setSubject(subject);
+
+        /**
         for (FileDocumentDTO fileDocumentDTO : notificationDTO.getFiles()) {
             helper.addAttachment(fileDocumentDTO.getName(),
                     new ByteArrayDataSource(
@@ -75,6 +85,7 @@ public class NotificationService {
                             fileDocumentDTO.getMime()));
 
         }
+         **/
 
         javaMailSender.send(message);
     }
