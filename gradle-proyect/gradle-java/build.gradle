@@ -1,0 +1,12 @@
+plugins{
+    id 'java'
+    id 'application'
+}
+
+mainClassName = 'omm.obarra.App'
+
+jar{
+    manifest{
+        attributes 'Main-Class': 'omm.obarra.App'
+    }
+}

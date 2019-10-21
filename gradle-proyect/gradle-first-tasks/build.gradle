@@ -1,0 +1,28 @@
+task starther{
+	doLast{
+		println 'start her'
+	}
+}
+
+task shownameproyect {
+	ext{
+		proyect = 'hello world gradle'
+		version = '1.0'
+	}
+	
+	dependsOn 'starther'
+
+	doLast{
+		Date now = new Date()
+
+		println  now.toString() + " Executing..." + proyect
+	}
+	
+}
+
+task finishher(dependsOn: 'shownameproyect'){
+	doLast{
+		println 'finish her'
+	}
+
+}
