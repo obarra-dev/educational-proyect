@@ -16,6 +16,8 @@ public class CurrencyExchangeController {
 
     @RequestMapping("/")
     public String index(final Model model){
+
+        // loads 1 and display 1, stream data, data driven mode.
         IReactiveDataDriverContextVariable reactiveDataDriverContextVariable = new ReactiveDataDriverContextVariable(
                 currencyExchangeService.findAll(), 1
         );

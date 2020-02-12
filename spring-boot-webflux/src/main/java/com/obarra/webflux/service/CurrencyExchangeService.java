@@ -25,6 +25,7 @@ public class CurrencyExchangeService {
     }
 
     public Flux<CurrencyExchange> findAll(){
+        //Simulate big list of data, streaming it every 2 second delay
         return Flux.fromIterable(currencyExchanges).delayElements(Duration.ofSeconds(2));
     }
 }
