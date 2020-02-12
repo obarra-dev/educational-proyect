@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+
+    <div class="row">
+        <div id="title">
+            <h1>Spring WebFlux + Thymeleaf</h1>
+        </div>
+        <div>
+            <p>Data is streaming, and will be displayed every 2 seconds, in a reactive way</p>
+        </div>
+        <table id="all" class="table table-striped">
+            <thead>
+            <tr>
+                <th width="70%">Currency</th>
+                <th>Seller</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="result" data-th-each="currencyExchange : ${currencyExchanges}">
+                <td>[[${currencyExchange.currency}]]</td>
+                <td>[[${currencyExchange.sellerValue}]]</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>
