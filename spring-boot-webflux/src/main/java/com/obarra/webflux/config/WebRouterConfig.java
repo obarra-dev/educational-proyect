@@ -12,11 +12,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class WebRouterConfig {
 
     @Bean
-    public CryptoCurrencyHandler cryptoCurrencyHandler(){
-        return new CryptoCurrencyHandler();
-    }
-
-    @Bean
     public RouterFunction<ServerResponse> routeCryptoCurrencyRequests(CryptoCurrencyHandler cryptoCurrencyHandler){
         return RouterFunctions
                 .route(RequestPredicates.GET("/cryptocurrency-handler/coins"), cryptoCurrencyHandler::getCoins)
