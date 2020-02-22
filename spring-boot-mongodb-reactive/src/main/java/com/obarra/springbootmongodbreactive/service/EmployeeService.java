@@ -1,8 +1,10 @@
 package com.obarra.springbootmongodbreactive.service;
 
 import com.obarra.springbootmongodbreactive.model.Employee;
-import com.obarra.springbootmongodbreactive.repository.EmployeeRepository;
+import com.obarra.springbootmongodbreactive.repository.EmployeeCrudRepository;
+import com.obarra.springbootmongodbreactive.repository.EmployeeMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
@@ -12,31 +14,46 @@ import reactor.core.publisher.Mono;
 public class EmployeeService {
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeMongoRepository employeeMongoRepository;
 
-    //TODO return object with id
-    public Disposable create(final Employee employee){
-        return employeeRepository.insert(employee).subscribe();
-    }
+    @Autowired
+    private EmployeeCrudRepository employeeCrudRepository;
 
     public Mono<Employee> findById(final Long id){
-        return employeeRepository.findById(id);
+        return employeeCrudRepository.findById(id);
     }
 
     public Flux<Employee> findByName(final String name){
-        return employeeRepository.findByName(name);
+        return employeeCrudRepository.findByName(name);
+    }
+
+    public Flux<Employee> findBySalary(final Long salary){
+        return employeeCrudRepository.findBySalary(salary);
+    }
+
+    public Flux<Employee> findBySalary(final Mono<Long> salary){
+        return employeeCrudRepository.findBySalary(salary);
     }
 
     public Flux<Employee> findAll(){
-        return employeeRepository.findAll();
+        return employeeCrudRepository.findAll();
     }
 
     public Mono<Employee> update(final Employee employee){
         //TODO why does not it need subscribe?
-        return employeeRepository.save(employee);
+        return employeeCrudRepository.save(employee);
     }
 
     public void delete(final Long id){
-        employeeRepository.deleteById(id).subscribe();
+        employeeCrudRepository.deleteById(id).subscribe();
+    }
+
+    //TODO return object with id
+    public Disposable create(final Employee employee){
+        return employeeMongoRepository.insert(employee).subscribe();
+    }
+
+    public Flux<Employee> findAllByFilter(final Employee employee){
+        return employeeMongoRepository.findAll(Example.of(employee));
     }
 }

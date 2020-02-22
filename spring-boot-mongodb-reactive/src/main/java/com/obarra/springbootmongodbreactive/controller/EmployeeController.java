@@ -39,9 +39,24 @@ public class EmployeeController {
         return employeeService.findByName(name);
     }
 
+    @GetMapping("/salary/{salary}")
+    public Flux<Employee> findBySalary(final @PathVariable Long salary){
+        return employeeService.findBySalary(salary);
+    }
+
+    @GetMapping("/salary-mono/{salary}")
+    public Flux<Employee> findBySalaryMono(final @PathVariable Long salary){
+        return employeeService.findBySalary(Mono.just(salary));
+    }
+
     @GetMapping()
     public Flux<Employee> findAll(){
         return employeeService.findAll();
+    }
+
+    @GetMapping("/byFilter")
+    public Flux<Employee> findAllBy(final Employee employee){
+        return employeeService.findAllByFilter(employee);
     }
 
     @PutMapping("/update")
