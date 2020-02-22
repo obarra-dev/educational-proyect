@@ -8,6 +8,12 @@ public class Employee {
     private String name;
     private Long salary;
 
+    public Employee(Long id, String name, Long salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+
     public Long getId() {
         return id;
     }
