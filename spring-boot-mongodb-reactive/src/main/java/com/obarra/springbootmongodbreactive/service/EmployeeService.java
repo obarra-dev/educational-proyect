@@ -3,8 +3,10 @@ package com.obarra.springbootmongodbreactive.service;
 import com.obarra.springbootmongodbreactive.model.Employee;
 import com.obarra.springbootmongodbreactive.repository.EmployeeCrudRepository;
 import com.obarra.springbootmongodbreactive.repository.EmployeeMongoRepository;
+import com.obarra.springbootmongodbreactive.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
@@ -18,6 +20,13 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeCrudRepository employeeCrudRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    public Flux<Employee> findByWithTemplate(final String name, final Long salary){
+        return employeeRepository.findByNameAndSalary(name, salary);
+    }
 
     public Mono<Employee> findById(final Long id){
         return employeeCrudRepository.findById(id);

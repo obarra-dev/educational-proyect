@@ -49,6 +49,12 @@ public class EmployeeController {
         return employeeService.findBySalary(Mono.just(salary));
     }
 
+    @GetMapping("/find")
+    public Flux<Employee> findByNameAndSalary(final @RequestParam(value = "name", required = true) String name,
+                                              final @RequestParam(value = "salary", required = true) Long salary){
+        return employeeService.findByWithTemplate(name, salary);
+    }
+
     @GetMapping()
     public Flux<Employee> findAll(){
         return employeeService.findAll();
