@@ -3,7 +3,7 @@ package com.obarra.springbootmongodbreactive;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//ringBootTest
 class SpringBootMongodbReactiveApplicationTests {
 
 	@Test

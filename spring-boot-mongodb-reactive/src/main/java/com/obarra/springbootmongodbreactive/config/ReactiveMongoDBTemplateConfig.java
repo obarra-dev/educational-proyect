@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
-@Configuration
+//@Configuration
 public class ReactiveMongoDBTemplateConfig {
 
     @Value("${database.name}")
