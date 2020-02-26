@@ -4,17 +4,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.instrument.async.TraceRunnable;
 import org.springframework.stereotype.Service;
 
 import com.omm.common.model.entity.Product;
 import com.omm.item.client.ProductClientRest;
 import com.omm.item.model.Item;
 
+import brave.Tracer;
+
 @Service("itemServiceFeign")
 public class ItemServiceFeign implements ItemService{
 
 	@Autowired
 	private ProductClientRest productClientRest;
+	
+	@Autowired
+	private Tracer tracer;
 	
 	@Override
 	public List<Item> findAll() {
@@ -26,8 +32,14 @@ public class ItemServiceFeign implements ItemService{
 
 	@Override
 	public Item findById(Long id, Long amount) {
-		Product product = productClientRest.getProduct(id);
-		return new Item(product, amount);
+		try {
+			Product product = productClientRest.getProduct(id);
+			return new Item(product, amount);
+		} catch (Exception e) {
+			// only for test purpose
+			tracer.currentSpan().tag("test-tag", "I can not connet with product service");
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
