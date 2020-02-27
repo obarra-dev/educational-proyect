@@ -1,4 +1,5 @@
-package com.obarra.user.entity;
+package com.omm.common.model.entity;
+
 
 import javax.persistence.*;
 

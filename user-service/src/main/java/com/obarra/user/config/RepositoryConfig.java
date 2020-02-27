@@ -1,7 +1,8 @@
 package com.obarra.user.config;
 
-import com.obarra.user.entity.Role;
-import com.obarra.user.entity.User;
+
+import com.omm.common.model.entity.Role;
+import com.omm.common.model.entity.User;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
