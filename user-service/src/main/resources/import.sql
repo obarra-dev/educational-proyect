@@ -1,8 +1,8 @@
-INSERT INTO USERS(USERNAME, PASSWORD, EMAIL, FIRST_NAME, LAST_NAME, ENABLE) VALUES ('obarra', '900', 'obarra@test.com', 'omar', 'barra', true);
+INSERT INTO USERS(USERNAME, PASSWORD, EMAIL, FIRST_NAME, LAST_NAME, ENABLE) VALUES ('obarra', '$2a$10$lhotEg.s44uMEVsoELye2.59EMRcAsFZ7Gc4/nN4dZzGzI1UwZWzi', 'obarra@test.com', 'omar', 'barra', true);
 
-INSERT INTO USERS(USERNAME, PASSWORD, EMAIL, FIRST_NAME, LAST_NAME, ENABLE) VALUES ('umar', '900', 'umar@test.com', 'omar', 'barra', true);
+INSERT INTO USERS(USERNAME, PASSWORD, EMAIL, FIRST_NAME, LAST_NAME, ENABLE) VALUES ('umar', '$2a$10$NIwpl/qhCPAMMl7wTbQwluYPLcHATIGoalkJ/HDP2HR.MNotUKvjS', 'umar@test.com', 'omar', 'barra', true);
 
-INSERT INTO USERS(USERNAME, PASSWORD, EMAIL, FIRST_NAME, LAST_NAME, ENABLE) VALUES ('delen', '900', 'delen@test.com', 'omar', 'barra', true);
+INSERT INTO USERS(USERNAME, PASSWORD, EMAIL, FIRST_NAME, LAST_NAME, ENABLE) VALUES ('delen', '$2a$10$NtcC1cDHNAaDRwEHhKfn5.w7HMnZXBh4OM3BzvFhHA4alrLcmysTK', 'delen@test.com', 'omar', 'barra', true);
 
 INSERT INTO ROLES(NAME) VALUES('ROLE_USER');
 INSERT INTO ROLES(NAME) VALUES('ROLE_ADMIN');
