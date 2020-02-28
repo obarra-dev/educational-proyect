@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 		
 		com.omm.common.model.entity.User user = userService.findByUsername(username);
-		
+		//TODO if username dont exist user-service throws 404, I need null. improve
 		if(Objects.isNull(user)) {
 			LOG.error("Do not exist User: "+user);
 			throw new UsernameNotFoundException("Do not exist User: "+user);
