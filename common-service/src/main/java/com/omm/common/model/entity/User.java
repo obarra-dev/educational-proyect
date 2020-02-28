@@ -20,6 +20,7 @@ public class User {
     private String firstName;
     private String lastName;
     private Boolean enable;
+    private Integer intent;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles"
     ,joinColumns = @JoinColumn(name = "users_id")
@@ -90,4 +91,12 @@ public class User {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
+	public Integer getIntent() {
+		return intent;
+	}
+
+	public void setIntent(Integer intent) {
+		this.intent = intent;
+	}
 }
