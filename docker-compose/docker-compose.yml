@@ -1,0 +1,102 @@
+version: '3.3'
+services:
+  config-server:
+    image: config-server:v1
+    ports:
+      - "8888:8888"
+    restart: always
+    networks:
+      - springcloud
+  eureka-server:
+    image: eureka-server:v1
+    ports:
+      - "8761:8761"
+    restart: always
+    networks:
+      - springcloud
+  sc-postgres12:
+    image: postgres:12-alpine
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - springcloud
+    environment: 
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: root
+  product-service:
+    image: product-service:v1
+    restart: always
+    networks:
+      - springcloud
+    depends_on: 
+      - config-server
+      - eureka-server
+      - sc-postgres12
+  item-service:
+    image: item-service:v1
+    ports:
+      - "8002:8002"
+      - "8005:8005"
+      - "8007:8007"
+    restart: always
+    networks:
+      - springcloud
+    depends_on: 
+      - config-server
+      - eureka-server
+      - product-service
+  user-service:
+    image: user-service:v1
+    restart: always
+    networks:
+      - springcloud
+    depends_on: 
+      - config-server
+      - eureka-server
+  oauth2-service:
+    image: oauth2-service:v1
+    ports:
+      - "9100:9100"
+    restart: always
+    networks:
+      - springcloud
+    depends_on: 
+      - config-server
+      - eureka-server
+      - user-service
+  zuul-server:
+    image: zuul-server:v1
+    ports:
+      - "8090:8090"
+    restart: always
+    networks:
+      - springcloud
+    depends_on: 
+      - config-server
+      - eureka-server
+      - product-service
+      - item-service
+      - user-service
+      - oauth2-service
+  sc-rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: always
+    networks:
+      - springcloud
+  zipkin-server:
+    image: zipkin-server:v1
+    ports:
+      - "9411:9411"
+    restart: always
+    networks:
+      - springcloud
+    depends_on: 
+      - sc-rabbitmq
+    environment: 
+      RABBIT_ADDRESSES: sc-rabbitmq:5672
+networks:
+  springcloud:
