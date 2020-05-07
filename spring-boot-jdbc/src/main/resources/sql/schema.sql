@@ -1,0 +1,21 @@
+CREATE TABLE WEATHER_TYPE
+(
+    WEATHER_TYPE_ID serial,
+    NAME character varying (30),
+    PRIMARY KEY (WEATHER_TYPE_ID)
+);
+
+CREATE TABLE WEATHER_DAY
+(
+    WEATHER_DAY_ID serial,
+    DAY integer,
+	RAIN_INTENSITY double precision,
+	PERIOD integer,
+	WEATHER_TYPE_ID integer REFERENCES WEATHER_TYPE(WEATHER_TYPE_ID),
+	PRIMARY KEY (WEATHER_DAY_ID)
+);
+
+
+
+
+
