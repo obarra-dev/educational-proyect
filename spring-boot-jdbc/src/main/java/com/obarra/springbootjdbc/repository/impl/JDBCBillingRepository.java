@@ -43,15 +43,17 @@ public class JDBCBillingRepository implements BillingRepository {
                 (rs, rowNum) -> new Billing(rs.getLong("billing_id"),
                         rs.getLong("policy_id"),
                         rs.getLong("billing_type_id"),
-                        null,
+                        rs.getDate("create_date").toLocalDate(),
                         rs.getBigDecimal("amount"))
         );
     }
 
     @Override
     public Integer save(final Billing billing) {
-        return jdbcTemplate.update("insert into BILLING(policy_id, billing_type_id, create_date, amount) "
-                + "(?, ?, ?, ?)",
+        return jdbcTemplate
+                .update("insert into BILLING(billing_id, policy_id, billing_type_id, create_date, amount) "
+                + " values (?, ?, ?, ?, ?)",
+                billing.getBillingId(),
                 billing.getPolicyId(),
                 billing.getBillingTypeId(),
                 billing.getCreateDate(),

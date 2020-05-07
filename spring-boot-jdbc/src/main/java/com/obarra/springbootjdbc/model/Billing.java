@@ -13,6 +13,9 @@ public class Billing {
     private LocalDate createDate;
     private BigDecimal amount;
 
+    public Billing() {
+    }
+
     public Billing(final Long billingId,
                    final Long policyId,
                    final Long billingTypeId,
