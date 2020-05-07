@@ -7,10 +7,10 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 
-//@Configuration
+@Configuration
 public class H2JDBCConfig {
 
-   /** @Bean
+    @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
@@ -18,5 +18,5 @@ public class H2JDBCConfig {
                 .addScript("classpath:sql/data.sql")
                 .build();
     }
-   */
+
 }

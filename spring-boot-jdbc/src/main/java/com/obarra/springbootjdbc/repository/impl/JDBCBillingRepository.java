@@ -43,7 +43,7 @@ public class JDBCBillingRepository implements BillingRepository {
                 (rs, rowNum) -> new Billing(rs.getLong("billing_id"),
                         rs.getLong("policy_id"),
                         rs.getLong("billing_type_id"),
-                        rs.getDate("create_date").toLocalDate(),
+                        null,
                         rs.getBigDecimal("amount"))
         );
     }
