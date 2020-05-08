@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class Test {
 
     @Autowired
-    private NamedParameterJDBCBillingRepository jdbcBillingRepository;
+    private JDBCBillingRepository jdbcBillingRepository;
 
     @GetMapping("/save")
     public Object save(){

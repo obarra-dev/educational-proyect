@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -51,6 +53,17 @@ public class NamedParameterJDBCBillingRepository implements BillingRepository {
                         rs.getDate("create_date").toLocalDate(),
                         rs.getBigDecimal("amount"))
         );
+    }
+
+    @Override
+    public Long saveAndReturnId(final Billing billing) {
+        final KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        namedParameterJdbcTemplate
+                .update("insert into BILLING(billing_id, policy_id, billing_type_id, create_date, amount) "
+                                + " values (:billingId, :policyId, :billingTypeId, :createDate, :amount)",
+                        new BeanPropertySqlParameterSource(billing), keyHolder);
+        return keyHolder.getKey().longValue();
     }
 
     @Override
