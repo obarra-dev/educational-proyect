@@ -20,8 +20,8 @@ public class JDBCBillingRepository implements BillingRepository {
     }
 
     @Override
-    public Integer count() {
-        return jdbcTemplate.queryForObject("select count(1) from BILLING", Integer.class);
+    public Long count() {
+        return jdbcTemplate.queryForObject("select count(1) from BILLING", Long.class);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class JDBCBillingRepository implements BillingRepository {
     }
 
     @Override
-    public Integer update(final Billing billing, final Integer billingId) {
+    public Integer update(final Billing billing, final Long billingId) {
         return jdbcTemplate.update("update BILLING"
                         + " set policy_id = ?, billing_type_id = ?, amount = ? "
                         + " where billing_id = ?",
@@ -73,7 +73,7 @@ public class JDBCBillingRepository implements BillingRepository {
     }
 
     @Override
-    public Integer delete(final Integer billingId) {
+    public Integer delete(final Long billingId) {
         return jdbcTemplate.update("delete from BILLING where billing_id = ?",
                 billingId);
     }

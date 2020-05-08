@@ -3,31 +3,36 @@ package com.obarra.springbootjdbc.repository.impl;
 import com.obarra.springbootjdbc.model.Billing;
 import com.obarra.springbootjdbc.repository.BillingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JDBCBillingRepository implements BillingRepository {
+public class NamedParameterJDBCBillingRepository implements BillingRepository {
 
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
-    public JDBCBillingRepository(final JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public NamedParameterJDBCBillingRepository(final NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
-    public Integer count() {
-        return jdbcTemplate.queryForObject("select count(1) from BILLING", Integer.class);
+    public Long count() {
+        return namedParameterJdbcTemplate
+                .queryForObject("select count(1) from BILLING",
+                        new HashMap<>(), Long.class) ;
     }
 
     @Override
     public Optional<Billing> findById(final Long billingId) {
-        return jdbcTemplate.queryForObject("select * from BILLING where billing_id = ?",
-                new Object[]{billingId},
+        return namedParameterJdbcTemplate.queryForObject("select * from BILLING where billing_id = :billingId",
+                new MapSqlParameterSource("billingId", billingId),
                 (rs, rowNum) -> Optional.of(
                         new Billing(rs.getLong("billing_id"),
                                 rs.getLong("policy_id"),
@@ -39,7 +44,7 @@ public class JDBCBillingRepository implements BillingRepository {
 
     @Override
     public List<Billing> findAll() {
-        return jdbcTemplate.query("select * from BILLING",
+        return namedParameterJdbcTemplate.query("select * from BILLING",
                 (rs, rowNum) -> new Billing(rs.getLong("billing_id"),
                         rs.getLong("policy_id"),
                         rs.getLong("billing_type_id"),
@@ -50,31 +55,25 @@ public class JDBCBillingRepository implements BillingRepository {
 
     @Override
     public Integer save(final Billing billing) {
-        return jdbcTemplate
+        return namedParameterJdbcTemplate
                 .update("insert into BILLING(billing_id, policy_id, billing_type_id, create_date, amount) "
-                + " values (?, ?, ?, ?, ?)",
-                billing.getBillingId(),
-                billing.getPolicyId(),
-                billing.getBillingTypeId(),
-                billing.getCreateDate(),
-                billing.getAmount());
+                                + " values (:billingId, :policyId, :billingTypeId, :createDate, :amount)",
+                        new BeanPropertySqlParameterSource(billing));
     }
 
     @Override
-    public Integer update(final Billing billing, final Integer billingId) {
-        return jdbcTemplate.update("update BILLING"
-                        + " set policy_id = ?, billing_type_id = ?, amount = ? "
-                        + " where billing_id = ?",
-                billing.getPolicyId(),
-                billing.getBillingTypeId(),
-                billing.getAmount(),
-                billingId
+    public Integer update(final Billing billing, final Long billingId) {
+        billing.setBillingId(billingId);
+        return namedParameterJdbcTemplate.update("update BILLING"
+                        + " set policy_id = :policyId, billing_type_id = :billingTypeId, amount = :amount "
+                        + " where billing_id = :billingId",
+                new BeanPropertySqlParameterSource(billing)
                 );
     }
 
     @Override
-    public Integer delete(final Integer billingId) {
-        return jdbcTemplate.update("delete from BILLING where billing_id = ?",
-                billingId);
+    public Integer delete(final Long billingId) {
+        return namedParameterJdbcTemplate.update("delete from BILLING where billing_id = :billingId",
+                new MapSqlParameterSource("billingId", billingId));
     }
 }

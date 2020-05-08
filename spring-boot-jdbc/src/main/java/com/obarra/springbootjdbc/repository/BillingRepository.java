@@ -7,7 +7,7 @@ import java.util.Optional;
 
 
 public interface BillingRepository {
-    Integer count();
+    Long count();
 
     Optional<Billing> findById(Long billingId);
 
@@ -15,7 +15,7 @@ public interface BillingRepository {
 
     Integer save(Billing billing);
 
-    Integer update(Billing billing, Integer billingId);
+    Integer update(Billing billing, Long billingId);
 
-    Integer delete(Integer billingId);
+    Integer delete(Long billingId);
 }
