@@ -18,7 +18,7 @@ import java.util.List;
 public class Test {
 
     @Autowired
-    private NamedParameterJDBCBillingRepository jdbcBillingRepository;
+    private JDBCBillingRepository jdbcBillingRepository;
 
     @Autowired
     private SimpleJDBCInsertBillingRepository simpleJDBCInsertBillingRepository;
@@ -37,9 +37,6 @@ public class Test {
     public Object filter(){
         Billing b = new Billing();
         b.setAmount(new BigDecimal("404"));
-        b.setBillingId(2L);
-        b.setCreateDate(LocalDate.now());
-
         return jdbcBillingRepository.filter(b);
     }
 

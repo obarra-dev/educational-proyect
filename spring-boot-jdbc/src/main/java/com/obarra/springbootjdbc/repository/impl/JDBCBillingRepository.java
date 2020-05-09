@@ -1,17 +1,21 @@
 package com.obarra.springbootjdbc.repository.impl;
 
+import com.obarra.springbootjdbc.repository.handler.BillingHandler;
 import com.obarra.springbootjdbc.repository.mapper.BillingMapper;
 import com.obarra.springbootjdbc.model.Billing;
 import com.obarra.springbootjdbc.repository.BillingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,10 +42,24 @@ public class JDBCBillingRepository implements BillingRepository {
     }
 
     @Override
-    public Map<Long, Map<String, Object>> filter(Billing billing) {
-        return null;
+    public Map<Long, Map<String, Object>> filter(final Billing billing) {
+        final Map<Long, Map<String, Object>> billingsMap = new HashMap<>();
+        final BillingHandler billingHandler = new BillingHandler(billingsMap);
+        jdbcTemplate.query("select * from BILLING "
+                        + "where (? is null or BILLING_ID = ?) "
+                        + "and (? is null or POLICY_ID = ?) "
+                        + "and (? is null or BILLING_TYPE_ID = ?) "
+                        + "and (? is null or CREATE_DATE = ?) "
+                        + "and (? is null or AMOUNT = ?) ",
+                billingHandler::processRow,
+                billing.getBillingId(), billing.getBillingId(),
+                billing.getPolicyId(), billing.getPolicyId(),
+                billing.getBillingTypeId(), billing.getBillingTypeId(),
+                billing.getCreateDate(), billing.getCreateDate(),
+                billing.getAmount(), billing.getAmount()
+        );
+        return billingsMap;
     }
-
     @Override
     public Optional<Billing> findById(final Long billingId) {
         return jdbcTemplate.queryForObject("select * from BILLING where billing_id = ?",
