@@ -1,4 +1,4 @@
-package com.obarra.springbootjdbc.mapper;
+package com.obarra.springbootjdbc.repository.mapper;
 
 import com.obarra.springbootjdbc.model.Billing;
 

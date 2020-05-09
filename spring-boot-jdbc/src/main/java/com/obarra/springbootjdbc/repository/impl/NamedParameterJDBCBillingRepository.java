@@ -1,6 +1,6 @@
 package com.obarra.springbootjdbc.repository.impl;
 
-import com.obarra.springbootjdbc.mapper.BillingMapper;
+import com.obarra.springbootjdbc.repository.mapper.BillingMapper;
 import com.obarra.springbootjdbc.model.Billing;
 import com.obarra.springbootjdbc.repository.BillingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
