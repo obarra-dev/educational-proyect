@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -111,8 +112,13 @@ public class JDBCBillingRepository implements BillingRepository {
                 Billing billing = billings.get(i);
                 preparedStatement.setObject(1, billing.getPolicyId());
                 preparedStatement.setObject(2, billing.getBillingTypeId());
-                preparedStatement.setObject(3, java.sql.Date.valueOf(billing.getCreateDate()));
                 preparedStatement.setBigDecimal(4, billing.getAmount());
+
+                if(Objects.isNull(billing.getCreateDate())) {
+                    preparedStatement.setObject(3, null);
+                } else {
+                    preparedStatement.setObject(3, java.sql.Date.valueOf(billing.getCreateDate()));
+                }
             }
 
             @Override
