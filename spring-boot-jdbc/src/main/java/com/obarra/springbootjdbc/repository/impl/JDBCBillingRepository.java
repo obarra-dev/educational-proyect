@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -34,6 +35,11 @@ public class JDBCBillingRepository implements BillingRepository {
     @Override
     public Long count() {
         return jdbcTemplate.queryForObject("select count(1) from BILLING", Long.class);
+    }
+
+    @Override
+    public Map<Long, Map<String, Object>> filter(Billing billing) {
+        return null;
     }
 
     @Override

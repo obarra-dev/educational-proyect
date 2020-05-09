@@ -1,5 +1,6 @@
 package com.obarra.springbootjdbc.repository.impl;
 
+import com.obarra.springbootjdbc.repository.handler.BillingHandler;
 import com.obarra.springbootjdbc.repository.mapper.BillingMapper;
 import com.obarra.springbootjdbc.model.Billing;
 import com.obarra.springbootjdbc.repository.BillingRepository;
@@ -14,6 +15,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -36,6 +38,19 @@ public class NamedParameterJDBCBillingRepository implements BillingRepository {
         return namedParameterJdbcTemplate
                 .queryForObject("select count(1) from BILLING",
                         new HashMap<>(), Long.class) ;
+    }
+
+    @Override
+    public Map<Long, Map<String, Object>> filter(final Billing billing) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("billingId", billing.getBillingId());
+
+        Map<Long, Map<String, Object>> billingsMap = new HashMap<>();
+        namedParameterJdbcTemplate.query("select * from BILLING ",
+                mapSqlParameterSource,
+                new BillingHandler(billingsMap)
+                );
+        return billingsMap;
     }
 
     @Override
