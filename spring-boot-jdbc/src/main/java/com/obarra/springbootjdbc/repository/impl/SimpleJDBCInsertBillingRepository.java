@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,16 +21,14 @@ public class SimpleJDBCInsertBillingRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Long save(final Billing billing) {
+    public Long save(final Long policyId, final BigDecimal amount) {
         final Map<String, Object> parameter = new HashMap<>();
-        parameter.put("policy_id", billing.getPolicyId());
-        parameter.put("amount", billing.getPolicyId());
+        parameter.put("policy_id", policyId);
+        parameter.put("amount", amount);
 
         final SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("BILLING")
                 .usingGeneratedKeyColumns("billing_id");
-
-        simpleJdbcInsert.executeAndReturnKey(new BeanPropertySqlParameterSource(billing)).longValue();
 
         return simpleJdbcInsert.executeAndReturnKey(parameter).longValue();
     }
