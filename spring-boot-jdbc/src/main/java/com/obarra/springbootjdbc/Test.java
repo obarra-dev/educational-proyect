@@ -3,6 +3,7 @@ package com.obarra.springbootjdbc;
 import com.obarra.springbootjdbc.model.Billing;
 import com.obarra.springbootjdbc.repository.impl.JDBCBillingRepository;
 import com.obarra.springbootjdbc.repository.impl.NamedParameterJDBCBillingRepository;
+import com.obarra.springbootjdbc.repository.impl.SimpleJDBCInsertBillingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class Test {
@@ -17,13 +20,48 @@ public class Test {
     @Autowired
     private JDBCBillingRepository jdbcBillingRepository;
 
-    @GetMapping("/save")
-    public Object save(){
+    @Autowired
+    private SimpleJDBCInsertBillingRepository simpleJDBCInsertBillingRepository;
+
+    @GetMapping("/savesimple")
+    public Object savesimple(){
         Billing b = new Billing();
         b.setAmount(new BigDecimal("404"));
         b.setBillingId(2L);
         b.setCreateDate(LocalDate.now());
-        return jdbcBillingRepository.save(b);
+
+        return simpleJDBCInsertBillingRepository.save(b);
+    }
+    @GetMapping("/save")
+    public Object save(){
+        Billing b = new Billing();
+        b.setAmount(new BigDecimal("404"));
+        b.setCreateDate(LocalDate.now());
+        return jdbcBillingRepository.saveAndReturnId(b);
+    }
+
+
+    @GetMapping("/saveall")
+    public Object saveall(){
+        Billing b = new Billing();
+        b.setAmount(new BigDecimal("404"));
+        b.setBillingId(2L);
+        b.setCreateDate(LocalDate.now());
+
+        List<Billing> billingList = new ArrayList<>();
+        billingList.add(b);
+        b = new Billing();
+        b.setAmount(new BigDecimal("407"));
+        b.setBillingId(3L);
+        b.setCreateDate(LocalDate.now());
+        billingList.add(b);
+
+        b = new Billing();
+        b.setAmount(new BigDecimal("408"));
+        b.setBillingId(4L);
+        b.setCreateDate(LocalDate.now());
+        billingList.add(b);
+        return jdbcBillingRepository.save(billingList);
     }
 
     @GetMapping("/update")

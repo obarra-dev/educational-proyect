@@ -1,21 +1,28 @@
 package com.obarra.springbootjdbc.repository.impl;
 
+import com.obarra.springbootjdbc.mapper.BillingMapper;
 import com.obarra.springbootjdbc.model.Billing;
 import com.obarra.springbootjdbc.repository.BillingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class NamedParameterJDBCBillingRepository implements BillingRepository {
+    private static final String SQL_INSERT = "insert into BILLING("
+            + " policy_id,"
+            + " billing_type_id,"
+            + " create_date, amount) "
+            + " values (:policyId, :billingTypeId, :createDate, :amount)";
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -35,43 +42,37 @@ public class NamedParameterJDBCBillingRepository implements BillingRepository {
     public Optional<Billing> findById(final Long billingId) {
         return namedParameterJdbcTemplate.queryForObject("select * from BILLING where billing_id = :billingId",
                 new MapSqlParameterSource("billingId", billingId),
-                (rs, rowNum) -> Optional.of(
-                        new Billing(rs.getLong("billing_id"),
-                                rs.getLong("policy_id"),
-                                rs.getLong("billing_type_id"),
-                                rs.getDate("create_date").toLocalDate(),
-                                rs.getBigDecimal("amount"))
-                ));
+                BillingMapper::resultMapOneOptional);
     }
 
     @Override
     public List<Billing> findAll() {
-        return namedParameterJdbcTemplate.query("select * from BILLING",
-                (rs, rowNum) -> new Billing(rs.getLong("billing_id"),
-                        rs.getLong("policy_id"),
-                        rs.getLong("billing_type_id"),
-                        rs.getDate("create_date").toLocalDate(),
-                        rs.getBigDecimal("amount"))
-        );
+        return namedParameterJdbcTemplate
+                .query("select * from BILLING",
+                        BillingMapper::resultMapOne);
     }
 
     @Override
     public Long saveAndReturnId(final Billing billing) {
         final KeyHolder keyHolder = new GeneratedKeyHolder();
-
         namedParameterJdbcTemplate
-                .update("insert into BILLING(billing_id, policy_id, billing_type_id, create_date, amount) "
-                                + " values (:billingId, :policyId, :billingTypeId, :createDate, :amount)",
-                        new BeanPropertySqlParameterSource(billing), keyHolder);
+                .update(SQL_INSERT,
+                        new BeanPropertySqlParameterSource(billing),
+                        keyHolder);
         return keyHolder.getKey().longValue();
     }
 
     @Override
     public Integer save(final Billing billing) {
         return namedParameterJdbcTemplate
-                .update("insert into BILLING(billing_id, policy_id, billing_type_id, create_date, amount) "
-                                + " values (:billingId, :policyId, :billingTypeId, :createDate, :amount)",
+                .update(SQL_INSERT,
                         new BeanPropertySqlParameterSource(billing));
+    }
+
+    @Override
+    public int[] save(final List<Billing> billings) {
+        SqlParameterSource[] insertBatch = SqlParameterSourceUtils.createBatch(billings.toArray());
+        return namedParameterJdbcTemplate.batchUpdate(SQL_INSERT, insertBatch);
     }
 
     @Override

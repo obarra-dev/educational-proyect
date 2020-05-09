@@ -1,6 +1,6 @@
 CREATE TABLE BILLING
 (
-    billing_id INT,
+    billing_id INT NOT NULL AUTO_INCREMENT,
     policy_id INT,
     billing_type_id INT,
     create_date DATETIME2,
