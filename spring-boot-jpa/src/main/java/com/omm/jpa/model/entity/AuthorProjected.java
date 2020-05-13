@@ -1,6 +1,6 @@
 package com.omm.jpa.model.entity;
 
-public interface AuthorProjection {
+public interface AuthorProjected {
     String getName();
     String getSurname();
 }

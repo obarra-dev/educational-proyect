@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Author {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -22,6 +22,7 @@ public class Author {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
 
     public Long getId() {
         return id;
@@ -45,5 +46,14 @@ public class Author {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

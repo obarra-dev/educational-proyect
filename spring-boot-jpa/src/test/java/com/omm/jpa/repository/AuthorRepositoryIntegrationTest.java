@@ -1,7 +1,8 @@
 package com.omm.jpa.repository;
 
 import com.omm.jpa.model.entity.Author;
-import com.omm.jpa.model.entity.AuthorProjection;
+import com.omm.jpa.model.entity.AuthorProjected;
+import com.omm.jpa.model.entity.AuthorProjected;
 import com.omm.jpa.model.entity.AuthorSimplified;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -43,9 +44,8 @@ public class AuthorRepositoryIntegrationTest {
 
     @Test
     public void findByFirstName(){
-     Author authorExpected = new Author("Omar", "Barra");
-     List<Author> result = authorRepository.findByFirstName("Omar");
-     MatcherAssert.assertThat(result, Matchers.contains(authorExpected));
+        List<Author> result = authorRepository.findByFirstName("Omar");
+        MatcherAssert.assertThat(result, Matchers.<Author>hasSize(1));
     }
 
     @Test
@@ -80,8 +80,8 @@ public class AuthorRepositoryIntegrationTest {
     @Test
     public void find(){
 
-        List<AuthorProjection> authors = authorComplexRepository.findFirstByFirstName();
-        for (AuthorProjection p: authors) {
+        List<AuthorProjected> authors = authorComplexRepository.findFirstByFirstName();
+        for (AuthorProjected p: authors) {
             System.out.println(p.getName() +" "+p.getSurname());
         }
         String na = authors.get(0).getName();
