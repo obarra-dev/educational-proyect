@@ -33,11 +33,11 @@ public class AuthorNativeRepositoryTest {
         entityManager.persist(new Author("Mariela", "Barra"));
 
         Query queryE = entityManager.createNativeQuery("insert into author (first_name, last_name) values ('Maru', 'Think')");
-       // queryE.executeUpdate();
+       queryE.executeUpdate();
 
         //TODO buscar la forma de recuperar el id
-        Object der = queryE.getSingleResult();
-        System.out.println(der);
+       // Object der = queryE.getSingleResult();
+        //System.out.println(der);
     }
 
 
