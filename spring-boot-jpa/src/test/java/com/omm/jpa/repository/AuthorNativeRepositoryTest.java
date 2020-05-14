@@ -29,14 +29,22 @@ public class AuthorNativeRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        entityManager.persist(new Author("Omar", "Barra"));
-        entityManager.persist(new Author("Mariela", "Barra"));
+        Author author = new  Author("Mariela", "Barra");
+        entityManager.persist(author);
+        System.out.println(author.getId());
+        author = new Author("Mariela", "Barra");
+        entityManager.persist(author);
+        System.out.println(author.getId());
 
-        Query queryE = entityManager.createNativeQuery("insert into author (first_name, last_name) values ('Maru', 'Think')");
+
+
+        Query queryE = entityManager.createNativeQuery("insert into author (first_name, last_name) values (?, ?)");
+
+        queryE.setParameter(1, "Maru")
+                .setParameter(2, "Think");
        queryE.executeUpdate();
-
         //TODO buscar la forma de recuperar el id
-       // Object der = queryE.getSingleResult();
+       Object der = queryE.getSingleResult();
         //System.out.println(der);
     }
 
