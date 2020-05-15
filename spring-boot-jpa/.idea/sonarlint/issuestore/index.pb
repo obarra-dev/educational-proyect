@@ -21,3 +21,15 @@ b
 2src/main/java/com/omm/jpa/model/entity/Author.java,1\3\135aaa425ad3f7d71f804c23d6cb4460a477f754
 t
 Dsrc/test/java/com/omm/jpa/repository/AuthorNativeRepositoryTest.java,a\d\ada89b200483d0f72734e651f98ba0d61a3c6f03
+o
+?src/main/java/com/omm/jpa/repository/PaymentTermRepository.java,9\c\9c44d0d8536b1a82fe8fbd258f834c5fb30a29f2
+g
+7src/main/java/com/omm/jpa/model/entity/PaymentTerm.java,1\2\126e3272341dcf68375c227471b6e9d4e5cf9e64
+u
+Esrc/main/java/com/omm/jpa/repository/PaymentTermSimpleRepository.java,8\0\80c88f6a72b39b9edefb4964e0f4c75c55be4a26
+h
+8src/main/java/com/omm/jpa/controller/TestController.java,5\c\5c64693f4f5c0ee0ff0dc40d3f8ec9ed76379b1a
+x
+Hsrc/test/java/com/omm/jpa/repository/BillingStatementRepositoryTest.java,2\8\28aa3d0ffb3bd33929cffb87fd63521f7676b330
+m
+=src/main/java/com/omm/jpa/model/entity/PaymentTermSimple.java,b\a\ba1571466265d82312a8cc71cd72f285b67ef61e
