@@ -2,12 +2,14 @@ package com.omm.jpa.controller;
 
 import com.omm.jpa.model.entity.PaymentTerm;
 import com.omm.jpa.model.entity.PaymentTermPlain;
+import com.omm.jpa.repository.BookRepository;
 import com.omm.jpa.repository.CurrencyRepository;
 import com.omm.jpa.repository.PaymentTermRepository;
 import com.omm.jpa.repository.PaymentTermPlainRepository;
 import com.omm.jpa.repository.PaymentTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +34,8 @@ public class TestController {
     private CurrencyRepository currencyRepository;
     @Autowired
     private PaymentTypeRepository paymentTypeRepository;
+    @Autowired
+    BookRepository bookRepository;
 
     @GetMapping("/all")
     public Object all(){
@@ -40,9 +44,13 @@ public class TestController {
 
     @GetMapping("/allEntity")
     public Object alle(){
-        return paymentTypeRepository.findAll();
+        return bookRepository.findAll();
     }
 
+    @GetMapping("/findById/{id}")
+    public Object findById(@PathVariable Integer id) {
+        return bookRepository.findById(id);
+    }
     @GetMapping("/test")
     public Object test(){
         Query queryE = entityManager.createNativeQuery("select top 3 * from PAYMENT_TERM ");
@@ -50,7 +58,7 @@ public class TestController {
     }
 
     @GetMapping("/findAllPlain")
-    public Object find(){
+    public Object findj(){
         return paymentTermPlainRepository.findAll();
     }
 
