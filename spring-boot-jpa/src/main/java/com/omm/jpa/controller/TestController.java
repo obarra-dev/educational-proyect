@@ -33,6 +33,11 @@ public class TestController {
     @Autowired
     private PaymentTypeRepository paymentTypeRepository;
 
+    @GetMapping("/all")
+    public Object all(){
+        return paymentTermRepository.findAll();
+    }
+
     @GetMapping("/allEntity")
     public Object alle(){
         return paymentTypeRepository.findAll();
