@@ -1,9 +1,11 @@
 package com.omm.jpa.controller;
 
 import com.omm.jpa.model.entity.PaymentTerm;
-import com.omm.jpa.model.entity.PaymentTermSimple;
+import com.omm.jpa.model.entity.PaymentTermPlain;
+import com.omm.jpa.repository.CurrencyRepository;
 import com.omm.jpa.repository.PaymentTermRepository;
-import com.omm.jpa.repository.PaymentTermSimpleRepository;
+import com.omm.jpa.repository.PaymentTermPlainRepository;
+import com.omm.jpa.repository.PaymentTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,16 @@ public class TestController {
     private PaymentTermRepository paymentTermRepository;
 
     @Autowired
-    private PaymentTermSimpleRepository paymentTermSimpleRepository;
+    private PaymentTermPlainRepository paymentTermPlainRepository;
+    @Autowired
+    private CurrencyRepository currencyRepository;
+    @Autowired
+    private PaymentTypeRepository paymentTypeRepository;
+
+    @GetMapping("/allEntity")
+    public Object alle(){
+        return paymentTypeRepository.findAll();
+    }
 
     @GetMapping("/test")
     public Object test(){
@@ -33,15 +44,14 @@ public class TestController {
         return queryE.getResultList();
     }
 
-    @GetMapping("/find")
+    @GetMapping("/findAllPlain")
     public Object find(){
-        Optional<PaymentTerm> queryE = paymentTermRepository.findById(2L);
-        return queryE;
+        return paymentTermPlainRepository.findAll();
     }
 
     @GetMapping("/findsim")
     public Object findsim(){
-        Optional<PaymentTermSimple> queryE = paymentTermSimpleRepository.findById(2L);
+        Optional<PaymentTermPlain> queryE = paymentTermPlainRepository.findById(2L);
         return queryE;
     }
 
