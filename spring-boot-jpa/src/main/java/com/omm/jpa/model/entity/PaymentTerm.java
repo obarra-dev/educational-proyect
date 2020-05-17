@@ -1,27 +1,33 @@
 package com.omm.jpa.model.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 public class PaymentTerm {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentTermId;
     @Column
     private Long partyId;
-    @Column
-    private Long paymentTypeId;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "payment_type_id")
+    private PaymentType paymentType;
     @Column
     private Long creditCardId;
-    @Column
-    private Long currencyId;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "currency_id")
+    private Currency currency;
     @Column
     private String accountNbr;
     @Column
@@ -30,8 +36,9 @@ public class PaymentTerm {
     private LocalDate expiration;
     @Column
     private String paymentKey;
-    @Column
-    private Long bankId;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "bank_id")
+    private Bank bank;
     @Column
     private Long bankBranchId;
     @Column
@@ -53,12 +60,12 @@ public class PaymentTerm {
         this.partyId = partyId;
     }
 
-    public Long getPaymentTypeId() {
-        return paymentTypeId;
+    public PaymentType getPaymentType() {
+        return paymentType;
     }
 
-    public void setPaymentTypeId(Long paymentTypeId) {
-        this.paymentTypeId = paymentTypeId;
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
     }
 
     public Long getCreditCardId() {
@@ -69,12 +76,12 @@ public class PaymentTerm {
         this.creditCardId = creditCardId;
     }
 
-    public Long getCurrencyId() {
-        return currencyId;
+    public Currency getCurrency() {
+        return currency;
     }
 
-    public void setCurrencyId(Long currencyId) {
-        this.currencyId = currencyId;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public String getAccountNbr() {
@@ -109,12 +116,12 @@ public class PaymentTerm {
         this.paymentKey = paymentKey;
     }
 
-    public Long getBankId() {
-        return bankId;
+    public Bank getBank() {
+        return bank;
     }
 
-    public void setBankId(Long bankId) {
-        this.bankId = bankId;
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 
     public Long getBankBranchId() {

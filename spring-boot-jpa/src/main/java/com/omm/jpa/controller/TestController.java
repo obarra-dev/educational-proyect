@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,8 +39,10 @@ public class TestController {
     BookRepository bookRepository;
 
     @GetMapping("/all")
-    public Object all(){
-        return paymentTermRepository.findAll();
+    public List<PaymentTerm> all(){
+        //return paymentTermRepository.findAll();
+        List<PaymentTerm> der = paymentTermRepository.findAll();
+        return der;
     }
 
     @GetMapping("/allEntity")
