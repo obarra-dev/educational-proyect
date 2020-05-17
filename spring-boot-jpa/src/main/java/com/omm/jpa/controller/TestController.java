@@ -3,6 +3,7 @@ package com.omm.jpa.controller;
 import com.omm.jpa.model.entity.PaymentTerm;
 import com.omm.jpa.model.entity.PaymentTermPlain;
 import com.omm.jpa.repository.BookRepository;
+import com.omm.jpa.repository.ContractHeaderRepository;
 import com.omm.jpa.repository.CurrencyRepository;
 import com.omm.jpa.repository.PaymentTermRepository;
 import com.omm.jpa.repository.PaymentTermPlainRepository;
@@ -36,13 +37,13 @@ public class TestController {
     @Autowired
     private PaymentTypeRepository paymentTypeRepository;
     @Autowired
+    private ContractHeaderRepository contractHeaderRepository;
+    @Autowired
     BookRepository bookRepository;
 
     @GetMapping("/all")
-    public List<PaymentTerm> all(){
-        //return paymentTermRepository.findAll();
-        List<PaymentTerm> der = paymentTermRepository.findAll();
-        return der;
+    public Object all(){
+        return contractHeaderRepository.findAll();
     }
 
     @GetMapping("/allEntity")
