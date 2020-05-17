@@ -10,8 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class PaymentTerm {
@@ -19,7 +21,8 @@ public class PaymentTerm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentTermId;
     @ManyToOne
-    @JoinColumn(name = "party_id")
+    @JoinColumn(name = "party_id", insertable = false, updatable = false)
+    //@Transient
     private Party party;
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_type_id")
@@ -139,5 +142,29 @@ public class PaymentTerm {
 
     public void setPeriodId(Long periodId) {
         this.periodId = periodId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PaymentTerm that = (PaymentTerm) o;
+        return Objects.equals(paymentTermId, that.paymentTermId) &&
+                Objects.equals(party, that.party) &&
+                Objects.equals(paymentType, that.paymentType) &&
+                Objects.equals(creditCardId, that.creditCardId) &&
+                Objects.equals(currency, that.currency) &&
+                Objects.equals(accountNbr, that.accountNbr) &&
+                Objects.equals(interAccountNbr, that.interAccountNbr) &&
+                Objects.equals(expiration, that.expiration) &&
+                Objects.equals(paymentKey, that.paymentKey) &&
+                Objects.equals(bank, that.bank) &&
+                Objects.equals(bankBranchId, that.bankBranchId) &&
+                Objects.equals(periodId, that.periodId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(paymentTermId, party, paymentType, creditCardId, currency, accountNbr, interAccountNbr, expiration, paymentKey, bank, bankBranchId, periodId);
     }
 }

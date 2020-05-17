@@ -1,5 +1,6 @@
 package com.omm.jpa.controller;
 
+import com.omm.jpa.model.entity.Party;
 import com.omm.jpa.model.entity.PaymentTerm;
 import com.omm.jpa.model.entity.PaymentTermPlain;
 import com.omm.jpa.repository.BookRepository;
@@ -46,7 +47,8 @@ public class TestController {
 
     @GetMapping("/all")
     public Object all(){
-        return paymentTermRepository.findAll();
+        List<Party> d = partyRepository.findAll();
+        return d;
     }
 
     @GetMapping("/allEntity")

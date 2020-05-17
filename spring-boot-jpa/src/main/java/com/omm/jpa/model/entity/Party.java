@@ -1,11 +1,16 @@
 package com.omm.jpa.model.entity;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.OneToMany;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -15,16 +20,18 @@ public class Party {
     @Column(nullable = false)
     private Long partyId;
 
-    @Basic(optional = false)
     @Column(nullable = false)
     private String firstName;
 
-    @Basic(optional = false)
     @Column(nullable = false)
     private String lastName;
 
+    @OneToMany(mappedBy = "party",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<PaymentTerm> paymentTerms;
+
     public Party() {
     }
+
     public Party(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -54,12 +61,28 @@ public class Party {
         this.lastName = lastName;
     }
 
-    @Override
-    public String toString() {
-        return "Party{" +
-                "partyId=" + partyId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+    public List<PaymentTerm> getPaymentTerms() {
+        return paymentTerms;
     }
+
+    public void setPaymentTerms(List<PaymentTerm> paymentTerms) {
+        this.paymentTerms = paymentTerms;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Party party = (Party) o;
+        return Objects.equals(partyId, party.partyId) &&
+                Objects.equals(firstName, party.firstName) &&
+                Objects.equals(lastName, party.lastName) &&
+                Objects.equals(paymentTerms, party.paymentTerms);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(partyId, firstName, lastName, paymentTerms);
+    }
+
 }
