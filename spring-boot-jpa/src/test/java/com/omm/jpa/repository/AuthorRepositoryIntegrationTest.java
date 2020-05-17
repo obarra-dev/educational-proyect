@@ -1,7 +1,6 @@
 package com.omm.jpa.repository;
 
-import com.omm.jpa.model.entity.Author;
-import com.omm.jpa.model.entity.AuthorProjected;
+import com.omm.jpa.model.entity.Party;
 import com.omm.jpa.model.entity.AuthorProjected;
 import com.omm.jpa.model.entity.AuthorSimplified;
 import org.hamcrest.MatcherAssert;
@@ -27,7 +26,7 @@ public class AuthorRepositoryIntegrationTest {
     private EntityManager entityManager;
 
     @Autowired
-    private AuthorRepository authorRepository;
+    private PartyRepository authorRepository;
 
     @Autowired
     private AuthorNativeRepository authorComplexRepository;
@@ -38,34 +37,34 @@ public class AuthorRepositoryIntegrationTest {
 
     @Before
     public void before(){
-        entityManager.persist(new Author("Omar", "Barra"));
-        entityManager.persist(new Author("Mariela", "Barra"));
+        entityManager.persist(new Party("Omar", "Barra"));
+        entityManager.persist(new Party("Mariela", "Barra"));
     }
 
     @Test
     public void findByFirstName(){
-        List<Author> result = authorRepository.findByFirstName("Omar");
-        MatcherAssert.assertThat(result, Matchers.<Author>hasSize(1));
+        List<Party> result = authorRepository.findByFirstName("Omar");
+        MatcherAssert.assertThat(result, Matchers.<Party>hasSize(1));
     }
 
     @Test
     public void findByFirstNameNot(){
-        Author authorExpected = new Author("Omar", "Barra");
-        List<Author> result = authorRepository.findByFirstName("omar");
+        Party authorExpected = new Party("Omar", "Barra");
+        List<Party> result = authorRepository.findByFirstName("omar");
         MatcherAssert.assertThat(result, IsNot.not(Matchers.contains(authorExpected)));
     }
 
     @Test
     public void findByFirstNameIgnoreCase(){
-     Author authorExpected = new Author("Omar", "Barra");
-     List<Author> result = authorRepository.findByFirstNameIgnoreCase("Omar");
+     Party authorExpected = new Party("Omar", "Barra");
+     List<Party> result = authorRepository.findByFirstNameIgnoreCase("Omar");
      MatcherAssert.assertThat(result, Matchers.contains(authorExpected));
     }
 
     @Test
     public void findByFirstNameIgnoreCaseNot(){
-        Author authorExpected = new Author("Omar", "Barra");
-        List<Author> result = authorRepository.findByFirstNameIgnoreCase("omar");
+        Party authorExpected = new Party("Omar", "Barra");
+        List<Party> result = authorRepository.findByFirstNameIgnoreCase("omar");
         MatcherAssert.assertThat(result, Matchers.contains(authorExpected));
     }
     @Test

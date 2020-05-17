@@ -5,6 +5,7 @@ import com.omm.jpa.model.entity.PaymentTermPlain;
 import com.omm.jpa.repository.BookRepository;
 import com.omm.jpa.repository.ContractHeaderRepository;
 import com.omm.jpa.repository.CurrencyRepository;
+import com.omm.jpa.repository.PartyRepository;
 import com.omm.jpa.repository.PaymentTermRepository;
 import com.omm.jpa.repository.PaymentTermPlainRepository;
 import com.omm.jpa.repository.PaymentTypeRepository;
@@ -39,11 +40,13 @@ public class TestController {
     @Autowired
     private ContractHeaderRepository contractHeaderRepository;
     @Autowired
+    private PartyRepository partyRepository;
+    @Autowired
     BookRepository bookRepository;
 
     @GetMapping("/all")
     public Object all(){
-        return contractHeaderRepository.findAll();
+        return paymentTermRepository.findAll();
     }
 
     @GetMapping("/allEntity")

@@ -1,6 +1,6 @@
 package com.omm.jpa.repository;
 
-import com.omm.jpa.model.entity.Author;
+import com.omm.jpa.model.entity.Party;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -29,12 +28,12 @@ public class AuthorNativeRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        Author author = new  Author("Mariela", "Barra");
+        Party author = new Party("Mariela", "Barra");
         entityManager.persist(author);
-        System.out.println(author.getId());
-        author = new Author("Mariela", "Barra");
+        System.out.println(author.getPartyId());
+        author = new Party("Mariela", "Barra");
         entityManager.persist(author);
-        System.out.println(author.getId());
+        System.out.println(author.getPartyId());
 
 
 

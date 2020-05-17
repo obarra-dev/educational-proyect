@@ -18,8 +18,9 @@ public class PaymentTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentTermId;
-    @Column
-    private Long partyId;
+    @ManyToOne
+    @JoinColumn(name = "party_id")
+    private Party party;
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_type_id")
     private PaymentType paymentType;
@@ -52,12 +53,12 @@ public class PaymentTerm {
         this.paymentTermId = paymentTermId;
     }
 
-    public Long getPartyId() {
-        return partyId;
+    public Party getParty() {
+        return party;
     }
 
-    public void setPartyId(Long partyId) {
-        this.partyId = partyId;
+    public void setParty(Party party) {
+        this.party = party;
     }
 
     public PaymentType getPaymentType() {

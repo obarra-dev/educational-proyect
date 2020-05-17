@@ -9,12 +9,11 @@ import javax.persistence.GenerationType;
 
 
 @Entity
-public class Author {
-
+public class Party {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long id;
+    private Long partyId;
 
     @Basic(optional = false)
     @Column(nullable = false)
@@ -24,18 +23,19 @@ public class Author {
     @Column(nullable = false)
     private String lastName;
 
-    public Author(String firstName, String lastName) {
+    public Party() {
+    }
+    public Party(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-
-    public Long getId() {
-        return id;
+    public Long getPartyId() {
+        return partyId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPartyId(Long partyId) {
+        this.partyId = partyId;
     }
 
     public String getFirstName() {
@@ -56,8 +56,8 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Author{" +
-                "id=" + id +
+        return "Party{" +
+                "partyId=" + partyId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';

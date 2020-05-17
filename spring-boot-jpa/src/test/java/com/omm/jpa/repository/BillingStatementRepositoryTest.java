@@ -1,18 +1,15 @@
 package com.omm.jpa.repository;
 
-import com.omm.jpa.model.entity.Author;
+import com.omm.jpa.model.entity.Party;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,9 +22,9 @@ public class BillingStatementRepositoryTest {
 
     //@Before
     public void setUp() throws Exception {
-        Author author = new  Author("Mariela", "Barra");
+        Party author = new Party("Mariela", "Barra");
         entityManager.persist(author);
-        System.out.println(author.getId());
+        System.out.println(author.getPartyId());
 
 
 
