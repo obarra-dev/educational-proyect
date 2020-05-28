@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,7 +27,7 @@ public class Party {
     @Column(nullable = false)
     private String lastName;
 
-    @OneToMany(mappedBy = "party",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "party", fetch = FetchType.EAGER)
     private List<PaymentTerm> paymentTerms;
 
     public Party() {

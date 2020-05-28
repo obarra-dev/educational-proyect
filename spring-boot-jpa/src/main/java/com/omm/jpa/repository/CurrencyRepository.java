@@ -1,9 +1,12 @@
 package com.omm.jpa.repository;
 
 import com.omm.jpa.model.entity.Currency;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.Repository;
 
-@Repository
-public interface CurrencyRepository extends CrudRepository<Currency, Long> {
+import java.util.List;
+
+public interface CurrencyRepository extends Repository<Currency, Long> {
+    List<Currency> findAll();
+
+    Currency findById(Long id);
 }
