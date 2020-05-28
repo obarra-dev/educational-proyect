@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
-@Entity(name = "derderder")
+@Entity
 @Table(name = "PAYMENT_TERM")
 public class PaymentTermPlain {
 
