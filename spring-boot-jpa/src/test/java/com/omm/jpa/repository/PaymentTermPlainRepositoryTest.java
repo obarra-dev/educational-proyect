@@ -22,11 +22,11 @@ public class PaymentTermPlainRepositoryTest {
     public void findById() {
         Optional<PaymentTermPlain> paymentTermPlain = paymentTermPlainRepository.findById(1L);
         assertTrue(paymentTermPlain.isPresent());
-        /**
+
         assertEquals(Long.valueOf(1L), paymentTermPlain.get().getBankId());
-        assertEquals(Long.valueOf(1L),paymentTermPlain.get().getCurrencyId());
-        assertEquals(Long.valueOf(1L),paymentTermPlain.get().getPaymentTypeId());
-        assertEquals(Long.valueOf(1L),paymentTermPlain.get().getPartyId());*/
+        assertEquals(Long.valueOf(1000L),paymentTermPlain.get().getCurrencyId());
+        assertEquals(Long.valueOf(4000L),paymentTermPlain.get().getPaymentTypeId());
+        assertEquals(Long.valueOf(1L),paymentTermPlain.get().getPartyId());
     }
 
 }

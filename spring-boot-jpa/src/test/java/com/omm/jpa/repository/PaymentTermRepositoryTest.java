@@ -20,6 +20,7 @@ public class PaymentTermRepositoryTest {
     @Test
     public void findById() {
         Optional<PaymentTerm> paymentTerm = paymentTermRepository.findById(1L);
+        assertTrue(paymentTerm.isPresent());
         assertEquals("BANCO DE GALICIA Y BUENOS AIRES", paymentTerm.get().getBank().getDescription());
         assertEquals("PESOS ARGENTINOS", paymentTerm.get().getCurrency().getDescription());
         assertEquals("DEBITO EN CUENTA", paymentTerm.get().getPaymentType().getDescription());

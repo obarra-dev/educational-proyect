@@ -6,19 +6,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "derderder")
 @Table(name = "PAYMENT_TERM")
 public class PaymentTermPlain {
 
     @Id
     private Long paymentTermId;
-    @Column
+    @Column(name = "PARTY_ID")
     private Long partyId;
-    @Column
+    @Column(name = "PAYMENT_TYPE_ID")
     private Long paymentTypeId;
     @Column
     private Long creditCardId;
-    @Column
+    @Column(name = "CURRENCY_ID")
     private Long currencyId;
     @Column
     private String accountNbr;
@@ -28,7 +28,7 @@ public class PaymentTermPlain {
     private LocalDate expiration;
     @Column
     private String paymentKey;
-    @Column
+    @Column(name = "BANK_ID")
     private Long bankId;
     @Column
     private Long bankBranchId;
