@@ -17,10 +17,10 @@ public class PaymentTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentTermId;
-    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "party_id", insertable = true, updatable = true)
     private Party party;
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_type_id")
     private PaymentType paymentType;
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
