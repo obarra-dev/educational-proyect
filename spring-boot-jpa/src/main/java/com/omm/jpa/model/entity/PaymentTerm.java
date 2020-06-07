@@ -9,9 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -20,18 +17,21 @@ public class PaymentTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentTermId;
-    @ManyToOne
-    @JoinColumn(name = "party_id", insertable = false, updatable = false)
-    //@Transient
+    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "party_id", insertable = true, updatable = true)
     private Party party;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "payment_type_id")
     private PaymentType paymentType;
-    @Column
-    private Long creditCardId;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "currency_id")
     private Currency currency;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "bank_id")
+    private Bank bank;
+
+    @Column
+    private Long creditCardId;
     @Column
     private String accountNbr;
     @Column
@@ -40,9 +40,6 @@ public class PaymentTerm {
     private LocalDate expiration;
     @Column
     private String paymentKey;
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "bank_id")
-    private Bank bank;
     @Column
     private Long bankBranchId;
     @Column

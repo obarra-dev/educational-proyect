@@ -26,9 +26,9 @@ public class Party {
 
     @Column(nullable = false)
     private String lastName;
-
+/**
     @OneToMany(mappedBy = "party", fetch = FetchType.EAGER)
-    private List<PaymentTerm> paymentTerms;
+    private List<PaymentTerm> paymentTerms;*/
 
     public Party() {
     }
@@ -62,28 +62,5 @@ public class Party {
         this.lastName = lastName;
     }
 
-    public List<PaymentTerm> getPaymentTerms() {
-        return paymentTerms;
-    }
-
-    public void setPaymentTerms(List<PaymentTerm> paymentTerms) {
-        this.paymentTerms = paymentTerms;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Party party = (Party) o;
-        return Objects.equals(partyId, party.partyId) &&
-                Objects.equals(firstName, party.firstName) &&
-                Objects.equals(lastName, party.lastName) &&
-                Objects.equals(paymentTerms, party.paymentTerms);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(partyId, firstName, lastName, paymentTerms);
-    }
 
 }
