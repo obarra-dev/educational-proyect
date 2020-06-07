@@ -63,7 +63,7 @@ public class PaymentTermRepositoryNotEmbebedDBTest {
     @Test
     @Rollback(false)
     public void save() {
-        paymentTerm.setPaymentKey("mar");
+        paymentTerm.setPaymentKey("mariela");
         PaymentTerm d = paymentTermRepository.save(paymentTerm);
         assertNotNull(d.getPaymentTermId());
         System.out.println(d.getPaymentTermId());
@@ -76,6 +76,32 @@ public class PaymentTermRepositoryNotEmbebedDBTest {
         // assertEquals("Omar", paymentTerm.get().getParty().getFirstName());
     }
 
+
+    @Test
+    @Rollback(false)
+    public void update() {
+        Optional<PaymentTerm> paymentTerm = paymentTermRepository.findById(1L);
+        assertTrue(paymentTerm.isPresent());
+        assertEquals("l/K51JlPpOAOU0P+sFC6Zo51if0Bti7j6Qc+/KicHEk=", paymentTerm.get().getInterAccountNbr());
+        assertEquals("Barra", paymentTerm.get().getParty().getLastName());
+
+        paymentTerm.get().setInterAccountNbr("12345");
+        paymentTerm.get().setParty(new Party());
+        paymentTerm.get().getParty().setPartyId(2L);
+        paymentTerm.get().getParty().setFirstName("nametest");
+        paymentTerm.get().getParty().setLastName("lastnametest");
+        paymentTermRepository.save(paymentTerm.get());
+
+        Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(1L);
+        Party party = paymentTermRepository.findPartyByPaymentTermId(1L);
+        assertTrue(paymentTermUpdated.isPresent());
+        assertEquals("12345", paymentTermUpdated.get().getInterAccountNbr());
+        assertEquals("lastnametest", party.getLastName());
+        assertEquals("BANCO DE GALICIA Y BUENOS AIRES", paymentTermUpdated.get().getBank().getDescription());
+        assertEquals("PESOS ARGENTINOS", paymentTermUpdated.get().getCurrency().getDescription());
+        assertEquals("DEBITO EN CUENTA", paymentTermUpdated.get().getPaymentType().getDescription());
+
+    }
 
     @Test
     @Rollback(false)
