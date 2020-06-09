@@ -120,14 +120,40 @@ public class PaymentTermRepositoryTest {
         Assert.assertEquals("Elen", party.getLastName());
     }
 
+    /**
+     * Update Operation in main object updates main data and the data of the manyToOne attributes.
+     * Does not matter the type of cascade.
+     * So If you want to update a specific attribute of a object, you need to get all the rest of data
+     * to avoid inconsistencies.
+     * Note: the update operations is going to execute in a any moment
+     * after saving method but not immediately after it.
+     */
     @Test
-    public void update() {
+    public void updateDataOfCurrentParty() {
         Optional<PaymentTerm> paymentTerm = paymentTermRepository.findById(1L);
         assertTrue(paymentTerm.isPresent());
-        assertEquals("l/K51JlPpOAOU0P+sFC6Zo51if0Bti7j6Qc+/KicHEk=", paymentTerm.get().getInterAccountNbr());
         assertEquals("Barra", paymentTerm.get().getParty().getLastName());
+        assertEquals("Omar", paymentTerm.get().getParty().getFirstName());
 
-        paymentTerm.get().setInterAccountNbr("12345");
+        paymentTerm.get().getParty().setFirstName("nametest");
+        paymentTerm.get().getParty().setLastName("lastnametest");
+        paymentTermRepository.save(paymentTerm.get());
+
+        Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(1L);
+        Party party = paymentTermRepository.findPartyByPaymentTermId(1L);
+        assertTrue(paymentTermUpdated.isPresent());
+        assertEquals("lastnametest", party.getLastName());
+        assertEquals("nametest", party.getFirstName());
+    }
+
+    @Test
+    public void updateChangeParty() {
+        Optional<PaymentTerm> paymentTerm = paymentTermRepository.findById(1L);
+        assertTrue(paymentTerm.isPresent());
+        assertEquals(Long.valueOf(1L), paymentTerm.get().getParty().getPartyId());
+        assertEquals("Barra", paymentTerm.get().getParty().getLastName());
+        assertEquals("Omar", paymentTerm.get().getParty().getFirstName());
+
         paymentTerm.get().setParty(new Party());
         paymentTerm.get().getParty().setPartyId(2L);
         paymentTerm.get().getParty().setFirstName("nametest");
@@ -137,11 +163,53 @@ public class PaymentTermRepositoryTest {
         Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(1L);
         Party party = paymentTermRepository.findPartyByPaymentTermId(1L);
         assertTrue(paymentTermUpdated.isPresent());
-        assertEquals("12345", paymentTermUpdated.get().getInterAccountNbr());
+        assertEquals(Long.valueOf(2L), party.getPartyId());
         assertEquals("lastnametest", party.getLastName());
-        assertEquals("BANCO DE GALICIA Y BUENOS AIRES", paymentTermUpdated.get().getBank().getDescription());
-        assertEquals("PESOS ARGENTINOS", paymentTermUpdated.get().getCurrency().getDescription());
-        assertEquals("DEBITO EN CUENTA", paymentTermUpdated.get().getPaymentType().getDescription());
+        assertEquals("nametest", party.getFirstName());
+    }
 
+    @Test
+    public void updateDataOfCurrentCurrency() {
+        Optional<PaymentTerm> paymentTerm = paymentTermRepository.findById(1L);
+        assertTrue(paymentTerm.isPresent());
+        assertEquals("PESOS ARGENTINOS", paymentTerm.get().getCurrency().getDescription());
+
+        paymentTerm.get().getCurrency().setDescription("CURRENCY TEST");
+
+        paymentTermRepository.save(paymentTerm.get());
+
+        Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(1L);
+        assertEquals("CURRENCY TEST", paymentTermUpdated.get().getCurrency().getDescription());
+    }
+
+    @Test
+    public void updateChangeCurrency() {
+        Optional<PaymentTerm> paymentTerm = paymentTermRepository.findById(1L);
+        assertTrue(paymentTerm.isPresent());
+        assertEquals(Long.valueOf(1000L), paymentTerm.get().getCurrency().getCurrencyId());
+        assertEquals("PESOS ARGENTINOS", paymentTerm.get().getCurrency().getDescription());
+
+        paymentTerm.get().setCurrency(new Currency());
+        paymentTerm.get().getCurrency().setCurrencyId(2000L);
+
+        paymentTermRepository.save(paymentTerm.get());
+
+        Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(1L);
+        assertEquals(Long.valueOf(2000L), paymentTermUpdated.get().getCurrency().getCurrencyId());
+        assertNull(paymentTermUpdated.get().getCurrency().getDescription());
+    }
+
+    @Test
+    public void updateDataOfCurrentPaymentType() {
+        Optional<PaymentTerm> paymentTerm = paymentTermRepository.findById(1L);
+        assertTrue(paymentTerm.isPresent());
+        assertEquals("DEBITO EN CUENTA", paymentTerm.get().getPaymentType().getDescription());
+
+        paymentTerm.get().getPaymentType().setDescription("PAYMENT TYPE TEST");
+
+        paymentTermRepository.save(paymentTerm.get());
+
+        Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(1L);
+        assertEquals("PAYMENT TYPE TEST", paymentTermUpdated.get().getPaymentType().getDescription());
     }
 }
