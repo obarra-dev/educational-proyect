@@ -26,9 +26,9 @@ public class Party {
 
     @Column(nullable = false)
     private String lastName;
-/**
-    @OneToMany(mappedBy = "party", fetch = FetchType.EAGER)
-    private List<PaymentTerm> paymentTerms;*/
+
+    @OneToMany(mappedBy = "party", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<PaymentTerm> paymentTerms;
 
     public Party() {
     }
@@ -62,5 +62,11 @@ public class Party {
         this.lastName = lastName;
     }
 
+    public Set<PaymentTerm> getPaymentTerms() {
+        return paymentTerms;
+    }
 
+    public void setPaymentTerms(Set<PaymentTerm> paymentTerms) {
+        this.paymentTerms = paymentTerms;
+    }
 }

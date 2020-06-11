@@ -6,7 +6,6 @@ import com.omm.jpa.model.entity.Currency;
 import com.omm.jpa.model.entity.Party;
 import com.omm.jpa.model.entity.PaymentTerm;
 import com.omm.jpa.model.entity.PaymentType;
-import org.hibernate.proxy.HibernateProxy;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -56,6 +56,17 @@ public class PaymentTermRepositoryTest {
         assertEquals("PESOS ARGENTINOS", paymentTerm.get().getCurrency().getDescription());
         assertEquals("DEBITO EN CUENTA", paymentTerm.get().getPaymentType().getDescription());
         assertEquals("Barra", paymentTerm.get().getParty().getLastName());
+
+        Set<PaymentTerm> paymentTerms = paymentTerm.get().getParty().getPaymentTerms();
+        assertEquals(3L, paymentTerms.size());
+
+        paymentTerms
+                .forEach(x -> {
+                    Assert.assertNotNull(x.getPaymentTermId());
+                });
+
+        Optional<PaymentTerm> samePaymentTerm = paymentTerms.stream().filter(x -> x == paymentTerm.get()).findFirst();
+        Assert.assertNotNull(samePaymentTerm.get());
     }
 
     @Test
