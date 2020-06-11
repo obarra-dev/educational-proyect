@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -25,6 +27,8 @@ import static org.junit.Assert.*;
 public class PaymentTermRepositoryTest {
     @Autowired
     private PaymentTermRepository paymentTermRepository;
+    @Autowired
+    private CurrencyRepository currencyRepository;
     private PaymentTerm paymentTerm;
 
     @Before
@@ -104,8 +108,70 @@ public class PaymentTermRepositoryTest {
     }
 
     @Test
-    public void save() {
-        paymentTerm.setPaymentKey("mar");
+    public void saveWithNewCurrencyCascadeALL() {
+        assertEquals(5, paymentTermRepository.count());
+        Currency currency = new Currency();
+        currency.setCurrencyId(9L);
+        currency.setDescription("currencytest");
+        paymentTerm.setCurrency(currency);
+
+        PaymentTerm createdPaymentTerm = paymentTermRepository.save(paymentTerm);
+
+        assertNotNull(createdPaymentTerm.getPaymentTermId());
+
+        assertEquals(6, paymentTermRepository.count());
+
+        PaymentTerm newPaymentTerm = paymentTermRepository.findAll().stream()
+                .filter(p -> p.getPaymentTermId().equals(createdPaymentTerm.getPaymentTermId()))
+                .findFirst().get();
+        Assert.assertEquals("currencytest", newPaymentTerm.getCurrency().getDescription());
+    }
+
+    @Test
+    public void saveWithExistFoundedCurrencyCascadeALL() {
+        paymentTerm.setCurrency(currencyRepository.findById(1000L));
+        assertEquals(5, paymentTermRepository.count());
+
+        PaymentTerm createdPaymentTerm = paymentTermRepository.save(paymentTerm);
+
+        assertNotNull(createdPaymentTerm.getPaymentTermId());
+        assertEquals(6, paymentTermRepository.count());
+
+        PaymentTerm newPaymentTerm = paymentTermRepository.findAll().stream()
+                .filter(p -> p.getPaymentTermId().equals(createdPaymentTerm.getPaymentTermId()))
+                .findFirst().get();
+        Assert.assertEquals("PESOS ARGENTINOS", newPaymentTerm.getCurrency().getDescription());
+    }
+
+    /**
+     * If the attribute is Cascade ALL, the value exist in DB and only we use the id,
+     * hibernate try to insert this attribute as a new element
+     */
+    @Test(expected = DataIntegrityViolationException.class)
+    public void saveWithExistCurrencyCascadeALL() {
+        paymentTerm.getCurrency().setCurrencyId(1000L);
+        assertEquals(5, paymentTermRepository.count());
+
+        PaymentTerm createdPaymentTerm = paymentTermRepository.save(paymentTerm);
+
+        assertNotNull(createdPaymentTerm.getPaymentTermId());
+        assertEquals(6, paymentTermRepository.count());
+
+        PaymentTerm newPaymentTerm = paymentTermRepository.findAll().stream()
+                .filter(p -> p.getPaymentTermId().equals(createdPaymentTerm.getPaymentTermId()))
+                .findFirst().get();
+        Assert.assertEquals("PESOS ARGENTINOS", newPaymentTerm.getCurrency().getDescription());
+    }
+
+    /**
+     * in this test we insert payment term and a party with cascade MERGE and only we set partyId.
+     * The payment term was inserted and linked with Party.
+     * The values of the current Party was not updated.
+     */
+    @Test
+    @Rollback(false)
+    public void saveWithExistPartyCascadeMERGE() {
+        paymentTerm.setCurrency(currencyRepository.findById(1000L));
         paymentTerm.getParty().setPartyId(2L);
         assertEquals(5, paymentTermRepository.count());
 
@@ -119,6 +185,72 @@ public class PaymentTermRepositoryTest {
         Assert.assertEquals("Maru", party.getFirstName());
         Assert.assertEquals("Elen", party.getLastName());
     }
+
+    /**
+     * in this test we insert payment term and a party with cascade MERGE and only we set partyId.
+     * The payment term was inserted and linked with Party.
+     * The values of the current Party was not updated.
+     */
+    @Test
+    public void saveWithExistPartyAndPartysValuesOthersCascadeMERGE() {
+        assertEquals(5, paymentTermRepository.count());
+
+        paymentTerm.setCurrency(currencyRepository.findById(1000L));
+        Party party = new Party();
+        party.setFirstName("firstName");
+        party.setLastName("lastName");
+        party.setPartyId(2L);
+        paymentTerm.setParty(party);
+
+        PaymentTerm createdPaymentTerm = paymentTermRepository.save(paymentTerm);
+
+        assertNotNull(createdPaymentTerm.getPaymentTermId());
+
+        assertEquals(6, paymentTermRepository.count());
+
+        Party createdParty = paymentTermRepository.findPartyByPaymentTermId(createdPaymentTerm.getPaymentTermId());
+        Assert.assertEquals("Maru", createdParty.getFirstName());
+        Assert.assertEquals("Elen", createdParty.getLastName());
+    }
+
+    /**
+     * Try to link the new payment term with does not existed Party.
+     * So, do not insert a new Party with Cascade MERGE
+     */
+    @Test(expected = DataIntegrityViolationException.class)
+    public void saveWithNewPartyCascadeMERGE() {
+        assertEquals(5, paymentTermRepository.count());
+
+        paymentTerm.getParty().setPartyId(40L);
+
+        PaymentTerm createdPaymentTerm = paymentTermRepository.save(paymentTerm);
+
+        assertNotNull(createdPaymentTerm.getPaymentTermId());
+
+        assertEquals(6, paymentTermRepository.count());
+
+        Party createdParty = paymentTermRepository.findPartyByPaymentTermId(createdPaymentTerm.getPaymentTermId());
+        Assert.assertEquals("Maru", createdParty.getFirstName());
+        Assert.assertEquals("Elen", createdParty.getLastName());
+    }
+    @Test
+    public void saveWithNewPartyCascadeALL() {
+        assertEquals(5, paymentTermRepository.count());
+
+        paymentTerm.setCurrency(currencyRepository.findById(1000L));
+        Party party = new Party();
+        party.setFirstName("firstName");
+        party.setLastName("lastName");
+        party.setPartyId(788L);
+        paymentTerm.setParty(party);
+
+        /**
+       TODO si en party se cambia a cascade ALL se deberia poder guardar pero tira este
+        Caused by: org.hibernate.PersistentObjectException: detached entity passed to persist: com.omm.jpa.model.entity.Party
+                Este mismo caso se puede hacer si ningun problema con currency. ¡Xq no funciona para Party?
+         */
+    }
+
 
     /**
      * Update Operation in main object updates main data and the data of the manyToOne attributes.
@@ -211,5 +343,20 @@ public class PaymentTermRepositoryTest {
 
         Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(1L);
         assertEquals("PAYMENT TYPE TEST", paymentTermUpdated.get().getPaymentType().getDescription());
+    }
+
+    /**
+     * This delete payment term, currency (Cascade ALL)
+     */
+    @Test
+    @Rollback(false)
+    public void deleteById() {
+        Optional<PaymentTerm> paymentTerm = paymentTermRepository.findById(5L);
+        assertTrue(paymentTerm.isPresent());
+
+        paymentTermRepository.deleteById(paymentTerm.get().getPaymentTermId());
+
+        Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(5L);
+        assertFalse(paymentTermUpdated.isPresent());
     }
 }

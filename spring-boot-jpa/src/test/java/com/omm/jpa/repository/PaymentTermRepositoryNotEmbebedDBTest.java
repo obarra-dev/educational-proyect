@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -146,6 +147,18 @@ public class PaymentTermRepositoryNotEmbebedDBTest {
         assertEquals(Long.valueOf(2L), party.getPartyId());
         assertEquals("lastnametest", party.getLastName());
         assertEquals("nametest", party.getFirstName());
+    }
+
+    @Test
+    @Rollback(false)
+    public void deleteById() {
+        Optional<PaymentTerm> paymentTerm = paymentTermRepository.findById(1L);
+        assertTrue(paymentTerm.isPresent());
+
+        paymentTermRepository.deleteById(paymentTerm.get().getPaymentTermId());
+
+        Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(1L);
+        assertFalse(paymentTermUpdated.isPresent());
     }
 
     @Test
