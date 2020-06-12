@@ -1,5 +1,7 @@
 package com.omm.jpa.controller;
 
+import com.omm.jpa.dao.PartyDAO;
+import com.omm.jpa.dto.PartyDTO;
 import com.omm.jpa.model.entity.Party;
 import com.omm.jpa.model.entity.PaymentTerm;
 import com.omm.jpa.model.entity.PaymentTermPlain;
@@ -44,6 +46,15 @@ public class TestController {
     private PartyRepository partyRepository;
     @Autowired
     BookRepository bookRepository;
+
+    @Autowired
+    PartyDAO partyDAO;
+
+    @GetMapping("/partydao")
+    public Object partydao(){
+        List<PartyDTO> d = partyDAO.getParties();
+        return d;
+    }
 
     @GetMapping("/all")
     public Object all(){
