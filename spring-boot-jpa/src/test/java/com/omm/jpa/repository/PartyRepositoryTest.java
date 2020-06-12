@@ -12,9 +12,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.validation.ConstraintViolationException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -35,9 +32,6 @@ public class PartyRepositoryTest {
     @Before
     public void setUp() {
         paymentTerm = new PaymentTerm();
-        Party party = new Party();
-        party.setPartyId(1L);
-        paymentTerm.setParty(party);
         PaymentType paymentType = new PaymentType();
         paymentType.setPaymentTypeId(2000L);
         paymentTerm.setPaymentType(paymentType);
@@ -117,9 +111,11 @@ public class PartyRepositoryTest {
         Party party = new Party();
         party.setFirstName("TestName");
         party.setLastName("TestLastName");
+        paymentTerm.setParty(party);
         Set<PaymentTerm> paymentTermSet = new HashSet<>();
         paymentTermSet.add(paymentTerm);
         party.setPaymentTerms(paymentTermSet);
+
         partyRepository.save(party);
 
         Assert.assertNotNull(party.getPartyId());
@@ -138,6 +134,5 @@ public class PartyRepositoryTest {
                     Assert.assertEquals(createdParty.get(0).getPartyId(),  x.getParty().getPartyId());
                     Assert.assertSame(createdParty.get(0), x.getParty());
                 });
-
     }
 }
