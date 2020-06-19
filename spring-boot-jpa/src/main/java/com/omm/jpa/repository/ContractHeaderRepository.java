@@ -22,9 +22,24 @@ public interface ContractHeaderRepository extends JpaRepository<ContractHeader, 
 
     List<ContractHeader> findByAgencyIdIsNotNull();
 
-
     @Query("select c from ContractHeader c where :coveragePlanId is null or  c.coveragePlanId=:coveragePlanId")
     Page<ContractHeader> findByCoveragePlanIdJPQL(@Param("coveragePlanId") Long coveragePlanId, Pageable pageRequest);
 
     Page<ContractHeader> findByCoveragePlanId(Long coveragePlanId, Pageable pageRequest);
+
+    @Query(value = "select c.CONTRACT_ID,"
+            + " c.CONTRACT_FROM "
+            + " from CONTRACT_HEADER c "
+            + " where :coveragePlanId is null or  c.COVERAGE_PLAN_ID=:coveragePlanId",
+    nativeQuery = true)
+    List<Object[]> findByCoveragePlanIdSQL(@Param("coveragePlanId") Long coveragePlanId);
+
+    @Query(value = "select c.CONTRACT_ID,"
+            + " c.CONTRACT_FROM "
+            + " from CONTRACT_HEADER c "
+            + " where :coveragePlanId is null or  c.COVERAGE_PLAN_ID=:coveragePlanId",
+            nativeQuery = true,
+            countQuery = " select count(CONTRACT_ID) from CONTRACT_HEADER"
+    )
+    Page<Object[]> findByCoveragePlanIdPageableSQL(@Param("coveragePlanId") Long coveragePlanId, Pageable pageRequest);
 }

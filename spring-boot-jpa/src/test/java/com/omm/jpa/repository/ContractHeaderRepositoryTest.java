@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -135,6 +136,28 @@ public class ContractHeaderRepositoryTest {
 
         assertEquals(pageDESC.getContent().get(0).getContractId(), pageASC.getContent().get(4).getContractId());
         assertEquals(pageDESC.getContent().get(4).getContractId(), pageASC.getContent().get(0).getContractId());
-
     }
+
+    @Test(expected = InvalidDataAccessApiUsageException.class)
+    public void findByCoveragePlanIdJPQLSortWithIncorrectProperty() {
+        contractHeaderRepository
+                .findByCoveragePlanIdJPQL(null, new PageRequest(0, 5,
+                        Sort.Direction.DESC,
+                        "contractFromXX"));
+    }
+
+    @Test
+    public void findByCoveragePlanIdSQL() {
+        List<Object[]> list = contractHeaderRepository
+                .findByCoveragePlanIdSQL(null);
+        assertEquals(5, list.size());
+    }
+
+    @Test
+    public void findByCoveragePlanIdPageableSQL() {
+        Page<Object[]> page = contractHeaderRepository
+                .findByCoveragePlanIdPageableSQL(null, new PageRequest(0, 5));
+        assertEquals(5, page.getContent().size());
+    }
+
 }
