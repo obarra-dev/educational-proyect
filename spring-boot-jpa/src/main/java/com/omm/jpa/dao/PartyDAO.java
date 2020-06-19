@@ -19,8 +19,6 @@ public class PartyDAO {
     public List<PartyDTO> getParties() {
         List<PartyDTO> parties = entityManager.createNamedQuery("getPartyNative", PartyDTO.class)
                 .getResultList();
-
-        System.out.println(parties);
         return parties;
     }
 }
