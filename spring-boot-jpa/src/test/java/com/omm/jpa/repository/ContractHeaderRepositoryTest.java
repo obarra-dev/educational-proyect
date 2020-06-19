@@ -5,6 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -52,5 +55,58 @@ public class ContractHeaderRepositoryTest {
         List<ContractHeader> contractHeaders = contractHeaderRepository
                 .findByAgencyIdIsNotNull();
         assertEquals(5, contractHeaders.size());
+    }
+
+    @Test
+    public void findByCoveragePlanIdPageableSortDefaultIdAndSort() {
+        Page<ContractHeader> pages = contractHeaderRepository
+                .findByCoveragePlanId(3L, new PageRequest(0, 2));
+        assertEquals(2, pages.getSize());
+        assertEquals(2, pages.getContent().size());
+        assertTrue(pages.getContent().get(0).getContractId()
+                < pages.getContent().get(1).getContractId());
+
+
+        pages = contractHeaderRepository
+                .findByCoveragePlanId(3L, new PageRequest(1, 2));
+        assertEquals(2, pages.getSize());
+        assertEquals(2, pages.getContent().size());
+        assertTrue(pages.getContent().get(0).getContractId()
+                < pages.getContent().get(1).getContractId());
+
+        pages = contractHeaderRepository
+                .findByCoveragePlanId(3L, new PageRequest(2, 2));
+        assertEquals(2, pages.getSize());
+        assertEquals(1, pages.getContent().size());
+    }
+
+    @Test
+    public void findByCoveragePlanIdPageableSortDESCAndExplicitId() {
+        Page<ContractHeader> pages = contractHeaderRepository
+                .findByCoveragePlanId(3L, new PageRequest(0, 2, Sort.Direction.DESC, "contractId"));
+        assertEquals(2, pages.getSize());
+        assertEquals(2, pages.getContent().size());
+        assertTrue(pages.getContent().get(0).getContractId()
+                > pages.getContent().get(1).getContractId());
+
+    }
+
+
+    @Test
+    public void findByCoveragePlanIdPageableJP() {
+        Page<ContractHeader> contractHeaders = contractHeaderRepository
+                .findByCoveragePlanId(3L, new PageRequest(0, 2));
+        assertEquals(2, contractHeaders.getSize());
+        assertEquals(2, contractHeaders.getContent().size());
+
+        contractHeaders = contractHeaderRepository
+                .findByCoveragePlanId(3L, new PageRequest(1, 2));
+        assertEquals(2, contractHeaders.getSize());
+        assertEquals(2, contractHeaders.getContent().size());
+
+        contractHeaders = contractHeaderRepository
+                .findByCoveragePlanId(3L, new PageRequest(2, 2));
+        assertEquals(2, contractHeaders.getSize());
+        assertEquals(1, contractHeaders.getContent().size());
     }
 }
