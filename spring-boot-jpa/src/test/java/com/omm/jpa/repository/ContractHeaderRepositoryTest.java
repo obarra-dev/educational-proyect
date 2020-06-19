@@ -59,54 +59,82 @@ public class ContractHeaderRepositoryTest {
 
     @Test
     public void findByCoveragePlanIdPageableSortDefaultIdAndSort() {
-        Page<ContractHeader> pages = contractHeaderRepository
+        Page<ContractHeader> page = contractHeaderRepository
                 .findByCoveragePlanId(3L, new PageRequest(0, 2));
-        assertEquals(2, pages.getSize());
-        assertEquals(2, pages.getContent().size());
-        assertTrue(pages.getContent().get(0).getContractId()
-                < pages.getContent().get(1).getContractId());
+        assertEquals(5, page.getTotalElements());
+        assertEquals(2, page.getSize());
+        assertEquals(2, page.getContent().size());
+        assertTrue(page.getContent().get(0).getContractId()
+                < page.getContent().get(1).getContractId());
 
 
-        pages = contractHeaderRepository
+        page = contractHeaderRepository
                 .findByCoveragePlanId(3L, new PageRequest(1, 2));
-        assertEquals(2, pages.getSize());
-        assertEquals(2, pages.getContent().size());
-        assertTrue(pages.getContent().get(0).getContractId()
-                < pages.getContent().get(1).getContractId());
+        assertEquals(5, page.getTotalElements());
+        assertEquals(2, page.getSize());
+        assertEquals(2, page.getContent().size());
+        assertTrue(page.getContent().get(0).getContractId()
+                < page.getContent().get(1).getContractId());
 
-        pages = contractHeaderRepository
+        page = contractHeaderRepository
                 .findByCoveragePlanId(3L, new PageRequest(2, 2));
-        assertEquals(2, pages.getSize());
-        assertEquals(1, pages.getContent().size());
+        assertEquals(5, page.getTotalElements());
+        assertEquals(2, page.getSize());
+        assertEquals(1, page.getContent().size());
     }
 
     @Test
     public void findByCoveragePlanIdPageableSortDESCAndExplicitId() {
-        Page<ContractHeader> pages = contractHeaderRepository
-                .findByCoveragePlanId(3L, new PageRequest(0, 2, Sort.Direction.DESC, "contractId"));
-        assertEquals(2, pages.getSize());
-        assertEquals(2, pages.getContent().size());
-        assertTrue(pages.getContent().get(0).getContractId()
-                > pages.getContent().get(1).getContractId());
+        Page<ContractHeader> page = contractHeaderRepository
+                .findByCoveragePlanId(3L,
+                        new PageRequest(0, 2,
+                        Sort.Direction.DESC,
+                        "contractId"));
+        assertEquals(5, page.getTotalElements());
+        assertEquals(2, page.getSize());
+        assertEquals(2, page.getContent().size());
 
+        Page<ContractHeader> lastPage = contractHeaderRepository
+                .findByCoveragePlanId(3L,
+                        new PageRequest(2, 2));
+
+        // compare the first element in a DESC list with the last element in a ASC list
+        assertEquals(lastPage.getContent().get(0).getContractId()
+                , page.getContent().get(0).getContractId());
     }
 
+    @Test
+    public void findByCoveragePlanIdJPQLWithFilter() {
+        Page<ContractHeader> page = contractHeaderRepository
+                .findByCoveragePlanIdJPQL(null, new PageRequest(0, 2));
+        assertEquals(5, page.getTotalElements());
+        assertEquals(2, page.getSize());
+        assertEquals(2, page.getContent().size());
+        assertTrue(page.getContent().get(0).getContractId()
+                < page.getContent().get(1).getContractId());
+    }
 
     @Test
-    public void findByCoveragePlanIdPageableJP() {
-        Page<ContractHeader> contractHeaders = contractHeaderRepository
-                .findByCoveragePlanId(3L, new PageRequest(0, 2));
-        assertEquals(2, contractHeaders.getSize());
-        assertEquals(2, contractHeaders.getContent().size());
+    public void findByCoveragePlanIdJPQLSortByContractFrom() {
+        Page<ContractHeader> pageDESC = contractHeaderRepository
+                .findByCoveragePlanIdJPQL(null, new PageRequest(0, 5,
+                        Sort.Direction.DESC,
+                        "contractFrom"));
+        assertEquals(5, pageDESC.getTotalElements());
+        assertEquals(5, pageDESC.getSize());
+        assertEquals(5, pageDESC.getContent().size());
 
-        contractHeaders = contractHeaderRepository
-                .findByCoveragePlanId(3L, new PageRequest(1, 2));
-        assertEquals(2, contractHeaders.getSize());
-        assertEquals(2, contractHeaders.getContent().size());
 
-        contractHeaders = contractHeaderRepository
-                .findByCoveragePlanId(3L, new PageRequest(2, 2));
-        assertEquals(2, contractHeaders.getSize());
-        assertEquals(1, contractHeaders.getContent().size());
+        Page<ContractHeader> pageASC = contractHeaderRepository
+                .findByCoveragePlanIdJPQL(null, new PageRequest(0, 5,
+                        Sort.Direction.ASC,
+                        "contractFrom"));
+        assertEquals(5, pageASC.getTotalElements());
+        assertEquals(5, pageASC.getSize());
+        assertEquals(5, pageASC.getContent().size());
+
+        assertEquals(pageDESC.getContent().get(0).getContractId(), pageASC.getContent().get(4).getContractId());
+        assertEquals(pageDESC.getContent().get(4).getContractId(), pageASC.getContent().get(0).getContractId());
+
     }
 }

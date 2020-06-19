@@ -23,7 +23,7 @@ public interface ContractHeaderRepository extends JpaRepository<ContractHeader, 
     List<ContractHeader> findByAgencyIdIsNotNull();
 
 
-    @Query("select c from ContractHeader c where c.coveragePlanId=:coveragePlanId")
+    @Query("select c from ContractHeader c where :coveragePlanId is null or  c.coveragePlanId=:coveragePlanId")
     Page<ContractHeader> findByCoveragePlanIdJPQL(@Param("coveragePlanId") Long coveragePlanId, Pageable pageRequest);
 
     Page<ContractHeader> findByCoveragePlanId(Long coveragePlanId, Pageable pageRequest);
