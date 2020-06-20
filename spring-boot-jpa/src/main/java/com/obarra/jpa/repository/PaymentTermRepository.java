@@ -26,4 +26,6 @@ public interface PaymentTermRepository extends JpaRepository<PaymentTerm, Long> 
             + "where pt.paymentTermId = :id")
     PaymentTermDTO findPaymentTermDTOById(@Param("id") Long id);
 
+    List<PaymentTerm> findByParty_FirstName_AndParty_LastName(String firstName, String lastName);
+
 }

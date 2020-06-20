@@ -119,6 +119,13 @@ public class PaymentTermRepositoryTest {
     }
 
     @Test
+    public void findByParty_FirstName_AndParty_LastName() {
+        List<PaymentTerm> paymentTerm = paymentTermRepository.findByParty_FirstName_AndParty_LastName("Omar", "Barra");
+        Assert.assertEquals(3, paymentTerm.size());
+    }
+
+
+    @Test
     public void saveWithNewCurrencyCascadeALL() {
         assertEquals(5, paymentTermRepository.count());
         Currency currency = new Currency();
