@@ -18,6 +18,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -142,6 +143,7 @@ public class PaymentTermRepositoryTest {
         Assert.assertEquals("BANCO DE GALICIA Y BUENOS AIRES", dto.getBankDescription());
         Assert.assertEquals("PESOS ARGENTINOS", dto.getCurrencyDescription());
         Assert.assertEquals("DEBITO EN CUENTA", dto.getPaymentTermTypeDescription());
+        Assert.assertEquals(Long.valueOf(123L), dto.getNumber());
     }
 
 
@@ -156,6 +158,35 @@ public class PaymentTermRepositoryTest {
     public void findByParty_FirstName_AndParty_LastName() {
         List<PaymentTerm> paymentTerm = paymentTermRepository.findByParty_FirstName_AndParty_LastName("Omar", "Barra");
         Assert.assertEquals(3, paymentTerm.size());
+    }
+
+    @Test
+    public void findPaymentTerms() {
+        List<PaymentTermDTO> paymentTerm = paymentTermRepository.findPaymentTerms();
+        for (int i = 0; i < paymentTerm.size(); i++) {
+            System.out.println(paymentTerm.get(i));
+            Assert.assertEquals(Long.valueOf(1), paymentTerm.get(1).getNumber());
+        }
+        Assert.assertEquals(4, paymentTerm.size());
+    }
+
+    @Test
+    public void findByCurrencyIds() {
+        List<Object> paymentTerm = paymentTermRepository.findByCurrencyIds(new Long[]{1000L});
+        for (Object object: paymentTerm) {
+           Object[] array = (Object[])object;
+           System.out.println(array[0]);
+        }
+        Assert.assertEquals(4, paymentTerm.size());
+    }
+
+    @Test
+    public void findByCurrencyIdsOther() {
+        List<Object[]> paymentTerm = paymentTermRepository.findByCurrencyIds(Arrays.asList(1000L));
+        for (Object[] array: paymentTerm) {
+            System.out.println(array[0]);
+        }
+        Assert.assertEquals(4, paymentTerm.size());
     }
 
     /**

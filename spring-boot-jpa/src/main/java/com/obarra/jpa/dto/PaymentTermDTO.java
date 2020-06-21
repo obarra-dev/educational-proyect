@@ -1,16 +1,17 @@
 package com.obarra.jpa.dto;
 
-import java.math.BigDecimal;
 
 public class PaymentTermDTO {
     private String bankDescription;
     private String paymentTermTypeDescription;
     private String currencyDescription;
+    private Long number;
 
-    public PaymentTermDTO(String bankDescription, String paymentTermTypeDescription, String currencyDescription) {
+    public PaymentTermDTO(String bankDescription, String paymentTermTypeDescription, String currencyDescription, Long number) {
         this.bankDescription = bankDescription;
         this.paymentTermTypeDescription = paymentTermTypeDescription;
         this.currencyDescription = currencyDescription;
+        this.number = number;
     }
 
     public String getBankDescription() {
@@ -35,5 +36,23 @@ public class PaymentTermDTO {
 
     public void setCurrencyDescription(String currencyDescription) {
         this.currencyDescription = currencyDescription;
+    }
+
+    public Long getNumber() {
+        return number;
+    }
+
+    public void setNumber(Long number) {
+        this.number = number;
+    }
+
+    @Override
+    public String toString() {
+        return "PaymentTermDTO{" +
+                "bankDescription='" + bankDescription + '\'' +
+                ", paymentTermTypeDescription='" + paymentTermTypeDescription + '\'' +
+                ", currencyDescription='" + currencyDescription + '\'' +
+                ", number=" + number +
+                '}';
     }
 }

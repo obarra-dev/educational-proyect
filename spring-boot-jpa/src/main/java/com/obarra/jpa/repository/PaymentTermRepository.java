@@ -34,7 +34,8 @@ public interface PaymentTermRepository extends JpaRepository<PaymentTerm, Long> 
 
     @Query("select new com.obarra.jpa.dto.PaymentTermDTO(pt.bank.description, "
             + "pt.paymentType.description, "
-            + "pt.currency.description) "
+            + "pt.currency.description, "
+            + "cast('123' as java.lang.Long)) "
             + "from PaymentTerm pt "
             + "where pt.paymentTermId = :id")
     PaymentTermDTO findPaymentTermDTOById(@Param("id") Long id);
@@ -46,5 +47,21 @@ public interface PaymentTermRepository extends JpaRepository<PaymentTerm, Long> 
     Boolean existWhitOutCreditCardId();
 
     Boolean existsByCreditCardIdIsNull();
+
+    @Query("select new com.obarra.jpa.dto.PaymentTermDTO(pt.bank.description, "
+            + "pt.paymentType.description, "
+            + "pt.currency.description, "
+            + "count(1)) "
+            + "from PaymentTerm pt "
+            + "group by pt.bank.description, pt.paymentType.description, pt.currency.description")
+    List<PaymentTermDTO> findPaymentTerms();
+
+    @Query(value = "select BANK_ID, PAYMENT_TYPE_ID, CURRENCY_ID "
+            + "from PAYMENT_TERM where CURRENCY_ID in :currencyIds", nativeQuery = true)
+    List<Object> findByCurrencyIds(@Param("currencyIds") Long[] currencyIds);
+
+    @Query(value = "select BANK_ID, PAYMENT_TYPE_ID, CURRENCY_ID "
+            + "from PAYMENT_TERM where CURRENCY_ID in :currencyIds", nativeQuery = true)
+    List<Object[]> findByCurrencyIds(@Param("currencyIds") List<Long> currencyIds);
 
 }
