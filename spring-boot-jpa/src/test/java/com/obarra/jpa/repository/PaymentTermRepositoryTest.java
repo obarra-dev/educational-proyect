@@ -13,6 +13,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -124,6 +126,60 @@ public class PaymentTermRepositoryTest {
         Assert.assertEquals(3, paymentTerm.size());
     }
 
+    /**
+     * ExampleMatcher generates dynamic queries so it can be used to filter
+     */
+    @Test
+    public void findAllWithExampleMatcher() {
+        //matchingAll = matching = and
+        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
+        PaymentTerm paymentTerm = new PaymentTerm();
+        paymentTerm.setCreditCardId(1L);
+        paymentTerm.setPeriodId(5L);
+        Bank bank = new Bank();
+        bank.setBankId(1L);
+        paymentTerm.setBank(bank);
+        List<PaymentTerm> list = paymentTermRepository.findAll(Example.of(paymentTerm, exampleMatcher));
+        Assert.assertEquals(1L, list.size());
+    }
+
+    @Test
+    public void existsById() {
+        Assert.assertFalse(paymentTermRepository.existsById(99L));
+    }
+
+    @Test
+    public void existWhitOutCreditCardId() {
+        Assert.assertTrue(paymentTermRepository.existWhitOutCreditCardId());
+    }
+
+    @Test
+    public void existWhitOutCreditCardIdWithExampleMatcher() {
+        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll()
+                .withIncludeNullValues()
+                .withIgnorePaths("paymentTermId", "party",
+                        "paymentType","currency",
+                        "bank",
+                        "accountNbr", "interAccountNbr",
+                        "expiration", "paymentKey",
+                        "bankBranchId", "periodId");
+        PaymentTerm paymentTerm = new PaymentTerm();
+        paymentTerm.setCreditCardId(1L);
+
+        Assert.assertTrue(paymentTermRepository.exists(Example.of(paymentTerm, exampleMatcher)));
+
+        List<PaymentTerm> list = paymentTermRepository.findAll(Example.of(paymentTerm, exampleMatcher));
+        Assert.assertEquals(2L, list.size());
+    }
+
+    @Test
+    public void existsWithExampleMatcher() {
+        //matchingAll = matching = and
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreCase("accountNbr");
+        PaymentTerm paymentTerm = new PaymentTerm();
+        paymentTerm.setAccountNbr("qMnGF8608nv");
+        Assert.assertTrue(paymentTermRepository.exists(Example.of(paymentTerm, exampleMatcher)));
+    }
 
     @Test
     public void saveWithNewCurrencyCascadeALL() {

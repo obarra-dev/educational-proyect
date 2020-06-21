@@ -28,4 +28,8 @@ public interface PaymentTermRepository extends JpaRepository<PaymentTerm, Long> 
 
     List<PaymentTerm> findByParty_FirstName_AndParty_LastName(String firstName, String lastName);
 
+    @Query("select case when count(1) > 0 then true else false end "
+            + "from PaymentTerm p where p.creditCardId is null")
+    Boolean existWhitOutCreditCardId();
+
 }
