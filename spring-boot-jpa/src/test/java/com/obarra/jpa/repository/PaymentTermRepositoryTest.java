@@ -149,8 +149,13 @@ public class PaymentTermRepositoryTest {
     }
 
     @Test
-    public void existWhitOutCreditCardId() {
+    public void existWhitOutCreditCardIdUsingJPQLQuery() {
         Assert.assertTrue(paymentTermRepository.existWhitOutCreditCardId());
+    }
+
+    @Test
+    public void existsByCreditCardIdIsNullUsingDerivedQueryMethod() {
+        Assert.assertTrue(paymentTermRepository.existsByCreditCardIdIsNull());
     }
 
     @Test

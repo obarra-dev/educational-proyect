@@ -32,4 +32,6 @@ public interface PaymentTermRepository extends JpaRepository<PaymentTerm, Long> 
             + "from PaymentTerm p where p.creditCardId is null")
     Boolean existWhitOutCreditCardId();
 
+    Boolean existsByCreditCardIdIsNull();
+
 }
