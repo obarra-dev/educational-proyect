@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional
@@ -41,4 +43,11 @@ public interface ContractHeaderRepository extends JpaRepository<ContractHeader, 
             countQuery = " select count(CONTRACT_ID) from CONTRACT_HEADER"
     )
     Page<Object[]> findByCoveragePlanIdPageableSQL(@Param("coveragePlanId") Long coveragePlanId, Pageable pageRequest);
+
+
+    List<ContractHeader> findByContractToGreaterThanEqual(LocalDateTime contractTo);
+
+    @Query("select c from ContractHeader c where c.contractFrom >= :contractFrom and c.contractTo <= :contractTo ")
+    List<ContractHeader> findByRange(@Param("contractFrom") LocalDateTime contractFrom,
+                                     @Param("contractTo") LocalDateTime contractTo);
 }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +28,21 @@ public class ContractHeaderRepositoryTest {
     public void findDistinctContractFrom() {
         List<ContractHeader> contractHeaders = contractHeaderRepository
                 .findDistinctByAgencyIdNotIn(Arrays.asList(2L, 3L));
+        assertEquals(2, contractHeaders.size());
+    }
+
+    @Test
+    public void findByContractToGreaterThanEqual() {
+        List<ContractHeader> contractHeaders = contractHeaderRepository
+                .findByContractToGreaterThanEqual(LocalDateTime.of(2020, 04,04,04,04));
+        assertEquals(5, contractHeaders.size());
+    }
+
+    @Test
+    public void findByRange() {
+        List<ContractHeader> contractHeaders = contractHeaderRepository
+                .findByRange(LocalDateTime.of(2019, 12,9,04,04),
+                        LocalDateTime.of(2022, 12,9,0,0));
         assertEquals(2, contractHeaders.size());
     }
 
@@ -155,6 +171,13 @@ public class ContractHeaderRepositoryTest {
 
     @Test
     public void findByCoveragePlanIdPageableSQL() {
+        Page<Object[]> page = contractHeaderRepository
+                .findByCoveragePlanIdPageableSQL(null, new PageRequest(0, 5));
+        assertEquals(5, page.getContent().size());
+    }
+
+    @Test
+    public void ds() {
         Page<Object[]> page = contractHeaderRepository
                 .findByCoveragePlanIdPageableSQL(null, new PageRequest(0, 5));
         assertEquals(5, page.getContent().size());
