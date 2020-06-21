@@ -105,6 +105,38 @@ public class PaymentTermRepositoryTest {
     }
 
     @Test
+    public void findByPartyFirstNameWithJoin() {
+        List<PaymentTerm> paymentTerms = paymentTermRepository.findByPartyFirstNameWithJoin("Omar");
+        Assert.assertEquals(3, paymentTerms.size());
+        Assert.assertEquals("Omar", paymentTerms.get(0).getParty().getFirstName());
+        Assert.assertEquals("Barra", paymentTerms.get(0).getParty().getLastName());
+    }
+
+    @Test
+    public void findByPartyFirstNameWithNormalJoin() {
+        List<PaymentTerm> paymentTerms = paymentTermRepository.findByPartyFirstNameWithNormalJoin("Omar");
+        Assert.assertEquals(3, paymentTerms.size());
+        Assert.assertEquals("Omar", paymentTerms.get(0).getParty().getFirstName());
+        Assert.assertEquals("Barra", paymentTerms.get(0).getParty().getLastName());
+    }
+
+    /**
+     * Find only by partyId
+     */
+    @Test
+    public void findByParty() {
+        Party party = new Party();
+        party.setPartyId(1L);
+        //finder ignores other attributes
+        party.setFirstName("TEST");
+        List<PaymentTerm> paymentTerms = paymentTermRepository.findByParty(party);
+        Assert.assertEquals(3, paymentTerms.size());
+        Assert.assertEquals("Omar", paymentTerms.get(0).getParty().getFirstName());
+        Assert.assertEquals("Barra", paymentTerms.get(0).getParty().getLastName());
+    }
+
+
+    @Test
     public void findPaymentTermDTOById() {
         PaymentTermDTO dto = paymentTermRepository.findPaymentTermDTOById(1L);
         Assert.assertEquals("BANCO DE GALICIA Y BUENOS AIRES", dto.getBankDescription());

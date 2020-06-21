@@ -16,6 +16,19 @@ public interface PaymentTermRepository extends JpaRepository<PaymentTerm, Long> 
     @Query("select pt from PaymentTerm pt where pt.party.firstName = :firstName")
     List<PaymentTerm> findByPartyFirstName(@Param("firstName") String firstName);
 
+    @Query("select pt "
+            + "from PaymentTerm pt inner join pt.party p "
+            + "where p.firstName = :firstName")
+    List<PaymentTerm> findByPartyFirstNameWithJoin(@Param("firstName") String firstName);
+
+    @Query("select pt "
+            + "from PaymentTerm pt inner join Party p on p.partyId = pt.party.partyId "
+            + "where p.firstName = :firstName")
+    List<PaymentTerm> findByPartyFirstNameWithNormalJoin(@Param("firstName") String firstName);
+
+
+    List<PaymentTerm> findByParty(Party party);
+
     @Query("select pt.party from PaymentTerm pt where pt.paymentTermId = :id")
     Party findPartyByPaymentTermId(@Param("id") Long id);
 
