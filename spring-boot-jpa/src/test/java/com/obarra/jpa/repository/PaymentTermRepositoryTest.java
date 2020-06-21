@@ -90,10 +90,10 @@ public class PaymentTermRepositoryTest {
 
         assertEquals("Barra", paymentTerm.get().getParty().getLastName());
 
-        assertNotEquals( Party.class, paymentTerm.get().getParty().getClass());
-        assertEquals( "org.hibernate.proxy.HibernateProxy",
+        assertNotEquals(Party.class, paymentTerm.get().getParty().getClass());
+        assertEquals("org.hibernate.proxy.HibernateProxy",
                 paymentTerm.get().getParty().getClass().getInterfaces()[0].getName());
-        assertEquals( "org.hibernate.proxy.ProxyConfiguration",
+        assertEquals("org.hibernate.proxy.ProxyConfiguration",
                 paymentTerm.get().getParty().getClass().getInterfaces()[1].getName());
     }
 
@@ -173,9 +173,9 @@ public class PaymentTermRepositoryTest {
     @Test
     public void findByCurrencyIds() {
         List<Object> paymentTerm = paymentTermRepository.findByCurrencyIds(new Long[]{1000L});
-        for (Object object: paymentTerm) {
-           Object[] array = (Object[])object;
-           System.out.println(array[0]);
+        for (Object object : paymentTerm) {
+            Object[] array = (Object[]) object;
+            System.out.println(array[0]);
         }
         Assert.assertEquals(4, paymentTerm.size());
     }
@@ -183,7 +183,7 @@ public class PaymentTermRepositoryTest {
     @Test
     public void findByCurrencyIdsOther() {
         List<Object[]> paymentTerm = paymentTermRepository.findByCurrencyIds(Arrays.asList(1000L));
-        for (Object[] array: paymentTerm) {
+        for (Object[] array : paymentTerm) {
             System.out.println(array[0]);
         }
         Assert.assertEquals(4, paymentTerm.size());
@@ -226,7 +226,7 @@ public class PaymentTermRepositoryTest {
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll()
                 .withIncludeNullValues()
                 .withIgnorePaths("paymentTermId", "party",
-                        "paymentType","currency",
+                        "paymentType", "currency",
                         "bank",
                         "accountNbr", "interAccountNbr",
                         "expiration", "paymentKey",
@@ -375,6 +375,7 @@ public class PaymentTermRepositoryTest {
         Assert.assertEquals("Maru", createdParty.getFirstName());
         Assert.assertEquals("Elen", createdParty.getLastName());
     }
+
     @Test
     public void saveWithNewPartyCascadeALL() {
         assertEquals(5, paymentTermRepository.count());
@@ -387,9 +388,9 @@ public class PaymentTermRepositoryTest {
         paymentTerm.setParty(party);
 
         /**
-       TODO si en party se cambia a cascade ALL se deberia poder guardar pero tira este
-        Caused by: org.hibernate.PersistentObjectException: detached entity passed to persist: com.obarra.jpa.model.entity.Party
-                Este mismo caso se puede hacer si ningun problema con currency. ¡Xq no funciona para Party?
+         TODO si en party se cambia a cascade ALL se deberia poder guardar pero tira este
+         Caused by: org.hibernate.PersistentObjectException: detached entity passed to persist: com.obarra.jpa.model.entity.Party
+         Este mismo caso se puede hacer si ningun problema con currency. ¡Xq no funciona para Party?
          */
     }
 
@@ -500,5 +501,22 @@ public class PaymentTermRepositoryTest {
 
         Optional<PaymentTerm> paymentTermUpdated = paymentTermRepository.findById(5L);
         assertFalse(paymentTermUpdated.isPresent());
+    }
+
+
+    //TODO validate
+    @Test
+    public void insertPaymentTerm() {
+         paymentTermRepository.insertPaymentTerm(1L, 2000L,1000L);
+    }
+
+    @Test
+    public void updateCurrency() {
+        paymentTermRepository.updateCurrency(1L, 2000L);
+    }
+
+    @Test
+    public void updateCurrencyNative() {
+        paymentTermRepository.updateCurrencyNative(1L, 2000L);
     }
 }
