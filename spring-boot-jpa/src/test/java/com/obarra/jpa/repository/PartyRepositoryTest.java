@@ -144,6 +144,7 @@ public class PartyRepositoryTest {
         for (PartyProjected partyProjected:result) {
             Assert.assertEquals("Omar", partyProjected.getName());
             Assert.assertEquals("Barra", partyProjected.getSurname());
+            Assert.assertEquals("1", partyProjected.getId());
         }
     }
 

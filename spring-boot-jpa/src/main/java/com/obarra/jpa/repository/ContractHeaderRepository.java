@@ -1,6 +1,7 @@
 package com.obarra.jpa.repository;
 
 import com.obarra.jpa.model.entity.ContractHeader;
+import com.obarra.jpa.projection.ContractHeaderProjected;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -50,4 +51,7 @@ public interface ContractHeaderRepository extends JpaRepository<ContractHeader, 
     @Query("select c from ContractHeader c where c.contractFrom >= :contractFrom and c.contractTo <= :contractTo ")
     List<ContractHeader> findByRange(@Param("contractFrom") LocalDateTime contractFrom,
                                      @Param("contractTo") LocalDateTime contractTo);
+
+    @Query(value = "select CONTRACT_ID as contractId, CONTRACT_FROM as contractFrom, CONTRACT_TO as contractTo from CONTRACT_HEADER", nativeQuery = true)
+    List<ContractHeaderProjected> findAllProjected();
 }

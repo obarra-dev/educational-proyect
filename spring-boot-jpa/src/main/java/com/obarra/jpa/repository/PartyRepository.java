@@ -26,7 +26,7 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
     @Query("select p from Party p inner join p.paymentTerms t where t.paymentTermId in :paymentTermIds")
     List<Party> findByPaymentTermIds(@Param("paymentTermIds") Long[] paymentTermIds);
 
-    @Query(value = "select  first_name as name, last_name as surname from PARTY where first_name = :firstName",
+    @Query(value = "select  party_id as id, first_name as name, last_name as surname from PARTY where first_name = :firstName",
             nativeQuery = true)
     List<PartyProjected> findAllProjected(@Param("firstName") String firstName);
 

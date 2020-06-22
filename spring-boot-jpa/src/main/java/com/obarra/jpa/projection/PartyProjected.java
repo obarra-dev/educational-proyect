@@ -1,7 +1,7 @@
 package com.obarra.jpa.projection;
 
 public interface PartyProjected {
-    Long getId();
+    String getId();
     String getName();
     String getSurname();
 }

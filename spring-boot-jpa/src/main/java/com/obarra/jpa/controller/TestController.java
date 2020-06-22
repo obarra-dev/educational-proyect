@@ -88,11 +88,4 @@ public class TestController {
         return queryE;
     }
 
-    @PostMapping("/save")
-    public Object save(@RequestBody PaymentTerm paymentTerm){
-
-        PaymentTerm queryE = paymentTermRepository.save(paymentTerm);
-
-        return queryE;
-    }
 }

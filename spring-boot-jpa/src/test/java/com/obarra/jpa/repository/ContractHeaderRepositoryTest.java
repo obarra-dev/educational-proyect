@@ -1,6 +1,9 @@
 package com.obarra.jpa.repository;
 
 import com.obarra.jpa.model.entity.ContractHeader;
+import com.obarra.jpa.projection.ContractHeaderProjected;
+import com.obarra.jpa.projection.PartyProjected;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,11 +179,15 @@ public class ContractHeaderRepositoryTest {
         assertEquals(5, page.getContent().size());
     }
 
+
     @Test
-    public void ds() {
-        Page<Object[]> page = contractHeaderRepository
-                .findByCoveragePlanIdPageableSQL(null, new PageRequest(0, 5));
-        assertEquals(5, page.getContent().size());
+    public void findAllProjected() {
+        List<ContractHeaderProjected> results = contractHeaderRepository
+                .findAllProjected();
+        ContractHeaderProjected contractHeaderProjected = results.get(0);
+        Assert.assertEquals(Long.valueOf(173L), contractHeaderProjected.getContractId());
+        Assert.assertEquals(LocalDateTime.class, contractHeaderProjected.getContractFrom().getClass());
+        Assert.assertEquals(LocalDateTime.class, contractHeaderProjected.getContractTo().getClass());
     }
 
 }
