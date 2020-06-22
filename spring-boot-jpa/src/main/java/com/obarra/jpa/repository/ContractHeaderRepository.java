@@ -4,6 +4,7 @@ import com.obarra.jpa.model.entity.ContractHeader;
 import com.obarra.jpa.projection.ContractHeaderProjected;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,6 +29,10 @@ public interface ContractHeaderRepository extends JpaRepository<ContractHeader, 
     Page<ContractHeader> findByCoveragePlanIdJPQL(@Param("coveragePlanId") Long coveragePlanId, Pageable pageRequest);
 
     Page<ContractHeader> findByCoveragePlanId(Long coveragePlanId, Pageable pageRequest);
+
+    Slice<ContractHeader> findByAgencyId(Long agencyId, Pageable pageRequest);
+
+    List<ContractHeader> findByInsurerId(Long insurerId, Pageable pageRequest);
 
     @Query(value = "select c.CONTRACT_ID,"
             + " c.CONTRACT_FROM "

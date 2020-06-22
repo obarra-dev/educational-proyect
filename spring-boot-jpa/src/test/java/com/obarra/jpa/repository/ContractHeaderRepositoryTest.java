@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -80,7 +81,7 @@ public class ContractHeaderRepositoryTest {
     @Test
     public void findByCoveragePlanIdPageableSortDefaultIdAndSort() {
         Page<ContractHeader> page = contractHeaderRepository
-                .findByCoveragePlanId(3L, new PageRequest(0, 2));
+                .findByCoveragePlanId(3L, PageRequest.of(0, 2));
         assertEquals(5, page.getTotalElements());
         assertEquals(2, page.getSize());
         assertEquals(2, page.getContent().size());
@@ -89,7 +90,7 @@ public class ContractHeaderRepositoryTest {
 
 
         page = contractHeaderRepository
-                .findByCoveragePlanId(3L, new PageRequest(1, 2));
+                .findByCoveragePlanId(3L, PageRequest.of(1, 2));
         assertEquals(5, page.getTotalElements());
         assertEquals(2, page.getSize());
         assertEquals(2, page.getContent().size());
@@ -97,7 +98,7 @@ public class ContractHeaderRepositoryTest {
                 < page.getContent().get(1).getContractId());
 
         page = contractHeaderRepository
-                .findByCoveragePlanId(3L, new PageRequest(2, 2));
+                .findByCoveragePlanId(3L, PageRequest.of(2, 2));
         assertEquals(5, page.getTotalElements());
         assertEquals(2, page.getSize());
         assertEquals(1, page.getContent().size());
@@ -107,7 +108,7 @@ public class ContractHeaderRepositoryTest {
     public void findByCoveragePlanIdPageableSortDESCAndExplicitId() {
         Page<ContractHeader> page = contractHeaderRepository
                 .findByCoveragePlanId(3L,
-                        new PageRequest(0, 2,
+                        PageRequest.of(0, 2,
                         Sort.Direction.DESC,
                         "contractId"));
         assertEquals(5, page.getTotalElements());
@@ -116,7 +117,7 @@ public class ContractHeaderRepositoryTest {
 
         Page<ContractHeader> lastPage = contractHeaderRepository
                 .findByCoveragePlanId(3L,
-                        new PageRequest(2, 2));
+                        PageRequest.of(2, 2));
 
         // compare the first element in a DESC list with the last element in a ASC list
         assertEquals(lastPage.getContent().get(0).getContractId()
@@ -124,9 +125,43 @@ public class ContractHeaderRepositoryTest {
     }
 
     @Test
+    public void findByCoveragePlanId() {
+        Page<ContractHeader> page = contractHeaderRepository
+                .findByCoveragePlanId(3L,
+                        PageRequest.of(0, 2,
+                                Sort.Direction.DESC,
+                                "contractId"));
+        assertEquals(5, page.getTotalElements());
+        assertEquals(2, page.getSize());
+        assertEquals(2, page.getContent().size());
+    }
+
+    @Test
+    public void findByAgencyIdWithSlice() {
+        Slice<ContractHeader> page = contractHeaderRepository
+                .findByAgencyId(3L,
+                        PageRequest.of(0, 2,
+                                Sort.Direction.DESC,
+                                "contractId"));
+        assertEquals(2, page.getSize());
+        assertEquals(1, page.getContent().size());
+    }
+
+    @Test
+    public void findByAgencyIdWithList() {
+        List<ContractHeader> list = contractHeaderRepository
+                .findByInsurerId(3L,
+                        PageRequest.of(0, 2,
+                                Sort.Direction.DESC,
+                                "contractId"));
+        assertEquals(1, list.size());
+    }
+
+
+    @Test
     public void findByCoveragePlanIdJPQLWithFilter() {
         Page<ContractHeader> page = contractHeaderRepository
-                .findByCoveragePlanIdJPQL(null, new PageRequest(0, 2));
+                .findByCoveragePlanIdJPQL(null, PageRequest.of(0, 2));
         assertEquals(5, page.getTotalElements());
         assertEquals(2, page.getSize());
         assertEquals(2, page.getContent().size());
@@ -137,7 +172,7 @@ public class ContractHeaderRepositoryTest {
     @Test
     public void findByCoveragePlanIdJPQLSortByContractFrom() {
         Page<ContractHeader> pageDESC = contractHeaderRepository
-                .findByCoveragePlanIdJPQL(null, new PageRequest(0, 5,
+                .findByCoveragePlanIdJPQL(null, PageRequest.of(0, 5,
                         Sort.Direction.DESC,
                         "contractFrom"));
         assertEquals(5, pageDESC.getTotalElements());
@@ -146,7 +181,7 @@ public class ContractHeaderRepositoryTest {
 
 
         Page<ContractHeader> pageASC = contractHeaderRepository
-                .findByCoveragePlanIdJPQL(null, new PageRequest(0, 5,
+                .findByCoveragePlanIdJPQL(null, PageRequest.of(0, 5,
                         Sort.Direction.ASC,
                         "contractFrom"));
         assertEquals(5, pageASC.getTotalElements());
@@ -160,7 +195,7 @@ public class ContractHeaderRepositoryTest {
     @Test(expected = InvalidDataAccessApiUsageException.class)
     public void findByCoveragePlanIdJPQLSortWithIncorrectProperty() {
         contractHeaderRepository
-                .findByCoveragePlanIdJPQL(null, new PageRequest(0, 5,
+                .findByCoveragePlanIdJPQL(null, PageRequest.of(0, 5,
                         Sort.Direction.DESC,
                         "contractFromXX"));
     }
@@ -175,7 +210,7 @@ public class ContractHeaderRepositoryTest {
     @Test
     public void findByCoveragePlanIdPageableSQL() {
         Page<Object[]> page = contractHeaderRepository
-                .findByCoveragePlanIdPageableSQL(null, new PageRequest(0, 5));
+                .findByCoveragePlanIdPageableSQL(null, PageRequest.of(0, 5));
         assertEquals(5, page.getContent().size());
     }
 
