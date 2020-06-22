@@ -82,4 +82,13 @@ public interface PaymentTermRepository extends JpaRepository<PaymentTerm, Long> 
     @Query("UPDATE PaymentTerm p SET p.currency.currencyId = :currencyId WHERE p.paymentTermId = :paymentTermId")
     void updateCurrency(@Param("paymentTermId") Long paymentTermId, @Param("currencyId") Long currencyId);
 
+    @Query(value = "select  count(1) from PAYMENT_TERM",
+            nativeQuery = true)
+    Long countPaymentTerm();
+
+    @Modifying
+    @Query(value = "delete PAYMENT_TERM where CURRENCY_ID = 1000",
+            nativeQuery = true)
+    Integer deleteAllPesos();
+
 }

@@ -1,9 +1,13 @@
 package com.obarra.jpa.repository;
 
+import com.obarra.jpa.projection.PartyProjected;
 import com.obarra.jpa.model.entity.Bank;
 import com.obarra.jpa.model.entity.Party;
 import com.obarra.jpa.model.entity.PaymentTerm;
 import com.obarra.jpa.model.entity.PaymentType;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.hamcrest.core.IsNot;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +15,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -66,18 +73,78 @@ public class PartyRepositoryTest {
                 });
     }
 
-    @Test
-    public void findByFirstName() {
-        List<Party> result = partyRepository.findByFirstName("omar");
-        Assert.assertNotNull(result);
-        Assert.assertEquals(0, result.size());
-    }
 
     @Test
     public void findByFirstNameIgnoreCase() {
         List<Party> result = partyRepository.findByFirstNameIgnoreCase("omar");
         Assert.assertNotNull(result);
         Assert.assertEquals(1, result.size());
+    }
+
+    @Test
+    public void findByFirstName(){
+        List<Party> result = partyRepository.findByFirstName("Omar");
+        MatcherAssert.assertThat(result, Matchers.<Party>hasSize(1));
+    }
+
+    @Test
+    public void findByFirstNameEmpty() {
+        List<Party> result = partyRepository.findByFirstName("omar");
+        Assert.assertNotNull(result);
+        Assert.assertEquals(0, result.size());
+    }
+
+    @Test
+    public void findByPaymentTerms(){
+        List<PaymentTerm> paymentTerms = new ArrayList<>();
+        PaymentTerm paymentTerm = new PaymentTerm();
+        paymentTerm.setPaymentTermId(1L);
+        paymentTerms.add(paymentTerm);
+        List<Party> result = partyRepository.findByPaymentTerms(paymentTerms);
+        MatcherAssert.assertThat(result, Matchers.<Party>hasSize(1));
+    }
+
+    @Test
+    public void findByPaymentTermsIn(){
+        List<PaymentTerm> paymentTerms = new ArrayList<>();
+        PaymentTerm paymentTerm = new PaymentTerm();
+        paymentTerm.setPaymentTermId(1L);
+        paymentTerms.add(paymentTerm);
+
+        paymentTerm = new PaymentTerm();
+        paymentTerm.setPaymentTermId(5L);
+        paymentTerms.add(paymentTerm);
+
+        List<Party> result = partyRepository.findByPaymentTermsIn(paymentTerms);
+        MatcherAssert.assertThat(result, Matchers.<Party>hasSize(2));
+    }
+
+    @Test
+    public void findByPaymentTermIds(){
+        List<Party> result = partyRepository.findByPaymentTermIds(Arrays.asList(1L, 5L));
+        MatcherAssert.assertThat(result, Matchers.<Party>hasSize(2));
+    }
+
+    @Test
+    public void findByPaymentTermIdsWithArrays(){
+        List<Party> result = partyRepository.findByPaymentTermIds(new Long[] {1L, 5L});
+        MatcherAssert.assertThat(result, Matchers.<Party>hasSize(2));
+    }
+
+    @Test
+    public void findByFirstNameNot(){
+        Party authorExpected = new Party("Omar", "Barra");
+        List<Party> result = partyRepository.findByFirstName("omar");
+        MatcherAssert.assertThat(result, IsNot.not(Matchers.contains(authorExpected)));
+    }
+
+    @Test
+    public void findAllProjected(){
+        List<PartyProjected> result = partyRepository.findAllProjected("Omar");
+        for (PartyProjected partyProjected:result) {
+            Assert.assertEquals("Omar", partyProjected.getName());
+            Assert.assertEquals("Barra", partyProjected.getSurname());
+        }
     }
 
     @Test(expected = Exception.class)
