@@ -1,5 +1,6 @@
 package com.obarra.springbootredis.controller;
 
+import com.obarra.springbootredis.domain.Policy;
 import com.obarra.springbootredis.repository.PolicyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -25,9 +27,9 @@ public class PolicyController {
         this.policyRepository = policyRepository;
     }
 
-    @GetMapping
-    public Map<String,String> findAll() {
-        Map<Object, Object> policiesMap = policyRepository.findAll();
+    @GetMapping("/entries")
+    public Map<String,String> findAllEntries() {
+        Map<Object, Object> policiesMap = policyRepository.findAllEntries();
         return policiesMap
                 .entrySet()
                 .stream()
@@ -35,6 +37,11 @@ public class PolicyController {
                         e -> (String)e.getKey(),
                         e -> e.getValue().toString()
                 ));
+    }
+
+    @GetMapping
+    public List<Policy> findAll() {
+        return policyRepository.findAll();
     }
 
     @DeleteMapping("/{policyId}")
