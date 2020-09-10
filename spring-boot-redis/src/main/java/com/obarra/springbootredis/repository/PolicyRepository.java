@@ -33,8 +33,7 @@ public class PolicyRepository {
         return hashOperations.values(KEY);
     }
 
-
-    public void add(final Policy policy) {
+    public void saveOrUpdate(final Policy policy) {
         hashOperations.put(KEY, policy.getPolicyId(), policy);
     }
 
