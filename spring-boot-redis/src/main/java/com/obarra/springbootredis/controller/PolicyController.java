@@ -1,6 +1,7 @@
 package com.obarra.springbootredis.controller;
 
 import com.obarra.springbootredis.domain.Policy;
+import com.obarra.springbootredis.publisher.MessagePublisher;
 import com.obarra.springbootredis.repository.PolicyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,15 +23,18 @@ import java.util.stream.Collectors;
 public class PolicyController {
 
     private PolicyRepository policyRepository;
+    private MessagePublisher messagePublisher;
 
     @Autowired
-    public PolicyController(final PolicyRepository policyRepository) {
+    public PolicyController(final PolicyRepository policyRepository, final MessagePublisher messagePublisher) {
         this.policyRepository = policyRepository;
+        this.messagePublisher = messagePublisher;
     }
 
     @PostMapping
     public Policy save(@RequestBody Policy policy) {
         policyRepository.saveOrUpdate(policy);
+        messagePublisher.publish(policy.toString());
         return policy;
     }
 

@@ -46,4 +46,12 @@ public class Policy implements Serializable {
     public int hashCode() {
         return Objects.hash(policyId, note);
     }
+
+    @Override
+    public String toString() {
+        return "Policy{" +
+                "policyId=" + policyId +
+                ", note='" + note + '\'' +
+                '}';
+    }
 }

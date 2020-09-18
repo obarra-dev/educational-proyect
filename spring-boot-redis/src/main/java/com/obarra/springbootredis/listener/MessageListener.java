@@ -8,6 +8,7 @@ public class MessageListener implements org.springframework.data.redis.connectio
 
     @Override
     public void onMessage(final Message message, final byte[] pattern) {
-        System.out.println("Message received: "+ new String(pattern));
+        System.out.println("Message received: "+ message.toString());
+        System.out.println("Pattern received: "+ new String(pattern));
     }
 }
